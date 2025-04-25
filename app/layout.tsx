@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar"; // <- นำเข้า Navbar
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const geistSans = Geist({
@@ -29,13 +29,24 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased flex flex-col`}
       >
+        {/* Using flex layout for proper spacing */}
+        <div className="flex flex-col min-h-screen">
+          {/* Main content with padding on top for desktop navbar */}
+          <main className="flex-grow pt-20 md:pt-24">
+            {children}
+          </main>
+          
+          {/* Footer with bottom padding to avoid navbar overlap on mobile */}
+          <div className="pb-24 md:pb-0">
+            <Footer />
+          </div>
+        </div>
+        
+        {/* Navbar is still outside the flex container since it's fixed */}
         <Navbar />
-        <main className="pt-20">{children}</main> {/* เผื่อระยะให้ Navbar Fixed */}
-        <Footer />
       </body>
     </html>
   );
 }
-

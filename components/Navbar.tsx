@@ -1,77 +1,319 @@
 "use client";
-import { useState } from "react";
-import Image from "next/image";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Menu,
+  MenuItem,
+  Paper,
+  Slide,
+  Toolbar,
+  Tooltip,
+  Typography,
+  Zoom,
+  alpha,
+  useMediaQuery,
+  useTheme
+} from "@mui/material";
+
+// Icons
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import RocketLaunchRoundedIcon from "@mui/icons-material/RocketLaunchRounded";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [activePath, setActivePath] = useState("/");
+  const [scrolled, setScrolled] = useState(false);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  useEffect(() => {
+    setMounted(true);
+    
+    // Get current path
+    setActivePath(window.location.pathname);
+    
+    // Add scroll listener
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const isMobileFinal = mounted ? isMobile : false;
+
+  const navItems = [
+    { label: "Home", href: "/", icon: <HomeRoundedIcon /> },
+    { label: "About", href: "/about", icon: <InfoRoundedIcon /> },
+    { label: "Docs", href: "/docs", icon: <ArticleRoundedIcon /> },
+  ];
+
+  const handleNavClick = (href) => {
+    setActivePath(href);
+    setMenuOpen(false);
+  };
 
   return (
-    <nav className="w-full bg-black/80 backdrop-blur border-b border-white/10 fixed top-0 z-50 text-white font-[var(--font-geist-sans)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 flex justify-between items-center">
-        
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/next.svg" alt="Logo" width={28} height={28} />
-          <span className="text-lg font-semibold tracking-tight">MyApp</span>
-        </Link>
-
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 items-center">
-          <Link href="/" className="hover:text-[#00dfd8] transition">Home</Link>
-          <Link href="/about" className="hover:text-[#00dfd8] transition">About</Link>
-          <Link href="/docs" className="hover:text-[#00dfd8] transition">Docs</Link>
-          <Link
-            href="/login"
-            className="ml-4 px-4 py-2 rounded-full bg-[#00dfd8] text-black font-medium hover:bg-opacity-80 transition"
-          >
-            Get Started
-          </Link>
-        </div>
-
-        {/* Mobile Hamburger */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden flex items-center"
+    <Box
+      sx={{
+        position: "fixed",
+        zIndex: 1200,
+        width: "100%",
+        transition: "all 0.3s ease",
+        padding: isMobileFinal ? "0 0.75rem 0.75rem" : "0.75rem 1.5rem",
+        bottom: isMobileFinal ? 0 : "auto",
+        top: isMobileFinal ? "auto" : 0,
+      }}
+    >
+      <Paper
+        elevation={scrolled ? 8 : 4}
+        sx={{
+          background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.9)}, ${alpha(theme.palette.primary.dark, 0.85)})`,
+          backdropFilter: "blur(10px)",
+          borderRadius: isMobileFinal ? "1.5rem" : "1rem",
+          border: `1px solid ${alpha(theme.palette.common.white, 0.15)}`,
+          overflow: "hidden",
+          boxShadow: scrolled 
+            ? `0 10px 30px -10px ${alpha(theme.palette.primary.main, 0.5)}` 
+            : `0 8px 20px -8px ${alpha(theme.palette.primary.main, 0.4)}`,
+          transition: "all 0.3s ease",
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: isMobileFinal ? "0.75rem 1rem" : "0.5rem 1.5rem",
+          }}
+          disableGutters
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            {menuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden px-4 pb-4 flex flex-col gap-3 bg-black/90">
-          <Link href="/" className="hover:text-[#00dfd8]">Home</Link>
-          <Link href="/about" className="hover:text-[#00dfd8]">About</Link>
-          <Link href="/docs" className="hover:text-[#00dfd8]">Docs</Link>
-          <Link
-            href="/login"
-            className="px-4 py-2 mt-2 rounded-full bg-[#00dfd8] text-black font-medium text-center"
-          >
-            Get Started
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+              <Box
+                sx={{
+                  bgcolor: "white",
+                  borderRadius: "50%",
+                  width: 36,
+                  height: 36,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: `0 4px 8px ${alpha(theme.palette.primary.main, 0.3)}`,
+                }}
+              >
+                <RocketLaunchRoundedIcon color="primary" sx={{ fontSize: 20 }} />
+              </Box>
+              <Typography 
+                variant="h6" 
+                sx={{ 
+                  fontWeight: 700, 
+                  color: "white",
+                  letterSpacing: "-0.02em" 
+                }}
+              >
+                MyApp
+                <Box 
+                  component="span" 
+                  sx={{ 
+                    color: theme.palette.secondary.light,
+                    ml: 0.5
+                  }}
+                >
+                  Pro
+                </Box>
+              </Typography>
+            </Box>
           </Link>
-        </div>
-      )}
-    </nav>
+
+          {isMobileFinal ? (
+            <IconButton
+              onClick={() => setMenuOpen(!menuOpen)}
+              sx={{
+                color: "white",
+                bgcolor: alpha(theme.palette.common.white, 0.15),
+                "&:hover": {
+                  bgcolor: alpha(theme.palette.common.white, 0.25),
+                },
+                transition: "all 0.2s ease",
+              }}
+            >
+              {menuOpen ? <CloseRoundedIcon /> : <MenuRoundedIcon />}
+            </IconButton>
+          ) : (
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              {navItems.map((item) => {
+                const isActive = activePath === item.href;
+                return (
+                  <Link key={item.href} href={item.href} style={{ textDecoration: "none" }}>
+                    <Button
+                      onClick={() => handleNavClick(item.href)}
+                      startIcon={item.icon}
+                      sx={{
+                        px: 2,
+                        py: 0.75,
+                        borderRadius: "1rem",
+                        color: isActive ? "primary.main" : "white",
+                        bgcolor: isActive ? "white" : "transparent",
+                        boxShadow: isActive ? 2 : "none",
+                        "&:hover": {
+                          bgcolor: isActive 
+                            ? "white" 
+                            : alpha(theme.palette.common.white, 0.15),
+                        },
+                        transition: "all 0.2s ease",
+                        textTransform: "none",
+                        fontWeight: isActive ? 600 : 500
+                      }}
+                    >
+                      {item.label}
+                    </Button>
+                  </Link>
+                );
+              })}
+
+              <Tooltip title="Get started now" arrow TransitionComponent={Zoom}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  disableElevation
+                  sx={{
+                    ml: 1,
+                    px: 2.5,
+                    py: 0.75,
+                    borderRadius: "1rem",
+                    boxShadow: `0 4px 12px ${alpha(theme.palette.secondary.main, 0.5)}`,
+                    fontWeight: 600,
+                    textTransform: "none",
+                    "&:hover": {
+                      boxShadow: `0 6px 16px ${alpha(theme.palette.secondary.main, 0.65)}`,
+                      transform: "translateY(-1px)",
+                    },
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  Get Started
+                </Button>
+              </Tooltip>
+            </Box>
+          )}
+        </Toolbar>
+
+        {isMobileFinal && (
+          <Slide direction="up" in={menuOpen} mountOnEnter unmountOnExit>
+            <Box 
+              sx={{ 
+                p: 2,
+                bgcolor: alpha(theme.palette.common.white, 0.08),
+                borderRadius: "1rem",
+                mx: 2,
+                mb: 2
+              }}
+            >
+              <Box 
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: 1.5,
+                }}
+              >
+                {navItems.map((item, index) => {
+                  const isActive = activePath === item.href;
+                  return (
+                    <Box 
+                      key={item.href}
+                      sx={{
+                        animation: "fadeIn 0.3s ease forwards",
+                        animationDelay: `${index * 0.1}s`,
+                        opacity: 0,
+                        "@keyframes fadeIn": {
+                          "0%": {
+                            opacity: 0,
+                            transform: "translateY(10px)"
+                          },
+                          "100%": {
+                            opacity: 1,
+                            transform: "translateY(0)"
+                          }
+                        }
+                      }}
+                    >
+                      <Link href={item.href} style={{ textDecoration: "none" }}>
+                        <Box
+                          onClick={() => handleNavClick(item.href)}
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: 0.5,
+                            p: 1.5,
+                            borderRadius: "1rem",
+                            color: isActive ? "primary.main" : "white",
+                            bgcolor: isActive ? "white" : "transparent",
+                            "&:hover": {
+                              bgcolor: isActive 
+                                ? "white" 
+                                : alpha(theme.palette.common.white, 0.15),
+                            },
+                            transition: "all 0.2s ease",
+                          }}
+                        >
+                          {item.icon}
+                          <Typography variant="caption" fontWeight={isActive ? 600 : 500}>
+                            {item.label}
+                          </Typography>
+                        </Box>
+                      </Link>
+                    </Box>
+                  );
+                })}
+              </Box>
+
+              <Button
+                variant="contained"
+                color="secondary"
+                fullWidth
+                disableElevation
+                sx={{
+                  mt: 2.5,
+                  py: 1.25,
+                  borderRadius: "1rem",
+                  boxShadow: `0 4px 12px ${alpha(theme.palette.secondary.main, 0.5)}`,
+                  fontWeight: 600,
+                  textTransform: "none",
+                  animation: "fadeIn 0.3s ease forwards",
+                  animationDelay: "0.3s",
+                  opacity: 0,
+                  "@keyframes fadeIn": {
+                    "0%": {
+                      opacity: 0,
+                      transform: "translateY(10px)"
+                    },
+                    "100%": {
+                      opacity: 1,
+                      transform: "translateY(0)"
+                    }
+                  }
+                }}
+              >
+                Get Started
+              </Button>
+            </Box>
+          </Slide>
+        )}
+      </Paper>
+    </Box>
   );
 }
