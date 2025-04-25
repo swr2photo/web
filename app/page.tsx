@@ -1,78 +1,48 @@
 import Image from "next/image";
+import Link from "next/link";
+import Timeline from "@/components/Timeline"; // นำเข้า Component Timeline
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#111] to-[#1a1a1a] text-white font-[var(--font-geist-sans)] flex flex-col justify-between items-center px-6 sm:px-12 py-16">
       
-      {/* Hero */}
+      {/* Hero Section */}
       <main className="flex flex-col items-center text-center gap-10 max-w-2xl">
         <Image
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={160}
-          height={36}
-          className="dark:invert"
+          src="/camp-logo.svg"
+          alt="Camp Logo"
+          width={120}
+          height={120}
+          className="rounded-full border border-white/10 shadow-lg"
         />
-
-        <div className="text-2xl sm:text-3xl font-semibold leading-snug">
-          Build your next project with <span className="text-[#00dfd8]">Next.js</span>
+        <div className="text-3xl sm:text-4xl font-bold leading-snug">
+          ค่ายคอม PSU SciCamp
         </div>
-
         <p className="text-gray-400 text-base sm:text-lg leading-relaxed">
-          Kickstart your app with the latest Next.js features. Deploy fast, scale instantly, and explore the power of modern web.
+          ยินดีต้อนรับสู่ค่ายคอมพิวเตอร์ คณะวิทยาศาสตร์ ม.อ.  
+          <br />
+          เรียนรู้ พัฒนา สร้างแรงบันดาลใจ และเติบโตไปด้วยกัน
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-          <a
-            href="https://vercel.com/new"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/register"
             className="bg-[#00dfd8] text-black font-medium py-3 px-6 rounded-full text-sm sm:text-base hover:bg-opacity-80 transition"
           >
-            Deploy on Vercel
-          </a>
-          <a
-            href="https://nextjs.org/docs"
-            target="_blank"
-            rel="noopener noreferrer"
+            สมัครเข้าค่าย
+          </Link>
+          <Link
+            href="/about"
             className="border border-white/20 text-white font-medium py-3 px-6 rounded-full text-sm sm:text-base hover:bg-white/10 transition"
           >
-            Read Documentation
-          </a>
+            รายละเอียดค่าย
+          </Link>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="mt-16 flex flex-wrap gap-6 text-sm text-gray-400 justify-center">
-        <a
-          href="https://nextjs.org/learn"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 hover:text-white transition"
-        >
-          <Image src="/file.svg" alt="Learn icon" width={16} height={16} />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 hover:text-white transition"
-        >
-          <Image src="/window.svg" alt="Examples icon" width={16} height={16} />
-          Templates
-        </a>
-        <a
-          href="https://nextjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 hover:text-white transition"
-        >
-          <Image src="/globe.svg" alt="Globe icon" width={16} height={16} />
-          nextjs.org →
-        </a>
-      </footer>
+      {/* Timeline Section */}
+      <Timeline /> {/* เพิ่มบรรทัดนี้เพื่อแสดง Timeline ของกิจกรรมค่าย */}
+      
     </div>
   );
 }
-
