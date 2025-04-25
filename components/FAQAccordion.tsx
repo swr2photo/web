@@ -1,4 +1,6 @@
 // ไฟล์: components/FAQAccordion.tsx
+"use client";
+
 import React, { useState } from 'react';
 import {
   Accordion,
@@ -7,9 +9,12 @@ import {
   Typography,
   Box,
   Container,
-  Paper
+  Paper,
+  alpha,
+  useTheme
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 
 interface FAQItem {
   question: string;
@@ -91,6 +96,7 @@ const faqData: FAQItem[] = [
 
 const FAQAccordion: React.FC = () => {
   const [expanded, setExpanded] = useState<string | false>(false);
+  const theme = useTheme();
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
@@ -98,10 +104,33 @@ const FAQAccordion: React.FC = () => {
 
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
-      <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-        <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 4, fontWeight: 'bold' }}>
-          คำถามที่พบบ่อย (FAQs)
-        </Typography>
+      <Paper 
+        elevation={3} 
+        sx={{ 
+          p: 3, 
+          borderRadius: 2,
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Background gradient */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '8px',
+            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+          }}
+        />
+        
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 4, gap: 1.5 }}>
+          <QuestionAnswerOutlinedIcon color="primary" sx={{ fontSize: 32 }} />
+          <Typography variant="h4" component="h1" align="center" sx={{ fontWeight: 'bold' }}>
+            คำถามที่พบบ่อย (FAQs)
+          </Typography>
+        </Box>
         
         <Box sx={{ mb: 4 }}>
           {faqData.map((faq, index) => (
@@ -113,8 +142,11 @@ const FAQAccordion: React.FC = () => {
                 mb: 1,
                 '&:before': { display: 'none' },
                 boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+                borderRadius: '8px !important',
+                overflow: 'hidden',
                 '&.Mui-expanded': {
                   boxShadow: '0 3px 6px rgba(0,0,0,0.16)',
+                  background: alpha(theme.palette.primary.light, 0.1),
                 }
               }}
             >
@@ -124,13 +156,11 @@ const FAQAccordion: React.FC = () => {
                 id={`panel${index}-header`}
                 sx={{
                   '&.Mui-expanded': {
-                    backgroundColor: 'primary.light',
-                    color: 'primary.contrastText',
-                    borderRadius: '4px 4px 0 0',
+                    borderBottom: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
                   }
                 }}
               >
-                <Typography sx={{ fontWeight: 500 }}>
+                <Typography sx={{ fontWeight: 500, color: expanded === `panel${index}` ? theme.palette.primary.main : 'inherit' }}>
                   {faq.question}
                 </Typography>
               </AccordionSummary>
@@ -145,9 +175,12 @@ const FAQAccordion: React.FC = () => {
           ))}
         </Box>
         
-        <Box sx={{ mt: 4, textAlign: 'center' }}>
+        <Box sx={{ mt: 4, textAlign: 'center', p: 2, bgcolor: alpha(theme.palette.primary.light, 0.1), borderRadius: 2 }}>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
+            ยังมีข้อสงสัยเพิ่มเติม?
+          </Typography>
           <Typography variant="body2" color="text.secondary">
-            หากมีคำถามเพิ่มเติม สามารถติดต่อเราได้ที่ Line Official: @campofficial หรืออีเมล: camp@example.ac.th
+            ติดต่อเราได้ที่ Line Official: <Box component="span" sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}>@campofficial</Box> หรืออีเมล: <Box component="span" sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}>camp@example.ac.th</Box>
           </Typography>
         </Box>
       </Paper>

@@ -3,13 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  AppBar,
   Box,
   Button,
-  Container,
   IconButton,
-  Menu,
-  MenuItem,
   Paper,
   Slide,
   Toolbar,
@@ -28,6 +24,7 @@ import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import RocketLaunchRoundedIcon from "@mui/icons-material/RocketLaunchRounded";
+import QuestionAnswerRoundedIcon from "@mui/icons-material/QuestionAnswerRounded";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -59,9 +56,10 @@ export default function Navbar() {
     { label: "Home", href: "/", icon: <HomeRoundedIcon /> },
     { label: "About", href: "/about", icon: <InfoRoundedIcon /> },
     { label: "Docs", href: "/docs", icon: <ArticleRoundedIcon /> },
+    { label: "FAQ", href: "/faq", icon: <QuestionAnswerRoundedIcon /> },
   ];
 
-  const handleNavClick = (href) => {
+  const handleNavClick = (href: string) => {
     setActivePath(href);
     setMenuOpen(false);
   };
@@ -225,18 +223,18 @@ export default function Navbar() {
               <Box 
                 sx={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gridTemplateColumns: `repeat(${navItems.length <= 3 ? '3' : '2'}, 1fr)`,
                   gap: 1.5,
                 }}
               >
-                {navItems.map((item, index) => {
+                {navItems.map((item, i) => {
                   const isActive = activePath === item.href;
                   return (
                     <Box 
                       key={item.href}
                       sx={{
                         animation: "fadeIn 0.3s ease forwards",
-                        animationDelay: `${index * 0.1}s`,
+                        animationDelay: `${i * 0.1}s`,
                         opacity: 0,
                         "@keyframes fadeIn": {
                           "0%": {

@@ -8,7 +8,6 @@ import {
   Box, 
   Button, 
   Container, 
-  Grid, 
   Typography, 
   Paper, 
   useTheme, 
@@ -51,10 +50,10 @@ export default function Home() {
   ];
 
   // Animation timings for staggered effect
-  const getAnimationDelay = (index) => ({
-    transitionDelay: `${index * 150}ms`
+  const getAnimationDelay = (index: number) => ({
+    transitionDelay: `${index * 150}ms`,
   });
-
+  
   return (
     <Box
       sx={{
@@ -95,93 +94,95 @@ export default function Home() {
       />
 
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-        {/* Hero Section */}
-        <Grid container spacing={4} direction="column" alignItems="center" textAlign="center" sx={{ mb: 8 }}>
-          <Grid item>
-            <Fade in={loaded} timeout={800}>
-              <Box sx={{ position: "relative", mb: 2 }}>
-                <Box
-                  sx={{
-                    position: "absolute",
-                    inset: -2,
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                    borderRadius: "50%",
-                    opacity: 0.2,
-                    animation: "pulse 2s infinite",
-                    "@keyframes pulse": {
-                      "0%": { opacity: 0.2, transform: "scale(1)" },
-                      "50%": { opacity: 0.3, transform: "scale(1.05)" },
-                      "100%": { opacity: 0.2, transform: "scale(1)" }
-                    }
-                  }}
+        {/* Hero Section - Using Stack instead of Grid */}
+        <Stack 
+          spacing={4} 
+          direction="column" 
+          alignItems="center" 
+          textAlign="center" 
+          sx={{ mb: 8 }}
+        >
+          <Fade in={loaded} timeout={800}>
+            <Box sx={{ position: "relative", mb: 2 }}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: -2,
+                  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                  borderRadius: "50%",
+                  opacity: 0.2,
+                  animation: "pulse 2s infinite",
+                  "@keyframes pulse": {
+                    "0%": { opacity: 0.2, transform: "scale(1)" },
+                    "50%": { opacity: 0.3, transform: "scale(1.05)" },
+                    "100%": { opacity: 0.2, transform: "scale(1)" }
+                  }
+                }}
+              />
+              <Paper
+                elevation={6}
+                sx={{
+                  p: 1,
+                  borderRadius: "50%",
+                  background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(theme.palette.secondary.main, 0.1)})`,
+                  backdropFilter: "blur(10px)",
+                  border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`
+                }}
+              >
+                <Image
+                  src="/camp-logo.svg"
+                  alt="Camp Logo"
+                  width={140}
+                  height={140}
+                  style={{ borderRadius: "50%" }}
                 />
-                <Paper
-                  elevation={6}
-                  sx={{
-                    p: 1,
-                    borderRadius: "50%",
-                    background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(theme.palette.secondary.main, 0.1)})`,
-                    backdropFilter: "blur(10px)",
-                    border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`
-                  }}
-                >
-                  <Image
-                    src="/camp-logo.svg"
-                    alt="Camp Logo"
-                    width={140}
-                    height={140}
-                    style={{ borderRadius: "50%" }}
-                  />
-                </Paper>
-                <Chip
-                  label="ปี 25"
-                  color="primary"
-                  sx={{
-                    position: "absolute",
-                    bottom: 10,
-                    right: -5,
-                    fontWeight: "bold",
-                    boxShadow: 2
-                  }}
-                />
-              </Box>
-            </Fade>
-          </Grid>
+              </Paper>
+              <Chip
+                label="ปี 25"
+                color="primary"
+                sx={{
+                  position: "absolute",
+                  bottom: 10,
+                  right: -5,
+                  fontWeight: "bold",
+                  boxShadow: 2
+                }}
+              />
+            </Box>
+          </Fade>
 
-          <Grid item>
-            <Fade in={loaded} timeout={1000} style={getAnimationDelay(1)}>
-              <Box>
-                <Typography
-                  variant="h2"
-                  component="h1" 
-                  sx={{
-                    fontWeight: 800,
-                    fontSize: { xs: "2rem", sm: "3rem", md: "3.5rem" },
-                    background: `linear-gradient(135deg, ${theme.palette.common.white}, ${theme.palette.primary.light})`,
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    mb: 1
-                  }}
-                >
-                  ค่ายคอม PSU SciCamp
-                </Typography>
-                <Typography 
-                  variant="h6" 
-                  color="primary.light" 
-                  sx={{ 
-                    fontWeight: 300,
-                    mb: 3,
-                    opacity: 0.9
-                  }}
-                >
-                  สร้างนักพัฒนารุ่นใหม่ หัวใจเทคโนโลยี
-                </Typography>
-              </Box>
-            </Fade>
-          </Grid>
+          <Fade in={loaded} timeout={1000} style={getAnimationDelay(1)}>
+            <Box>
+              <Typography
+                variant="h2"
+                component="h1" 
+                sx={{
+                  fontWeight: 800,
+                  fontSize: { xs: "2rem", sm: "3rem", md: "3.5rem" },
+                  background: `linear-gradient(135deg, ${theme.palette.common.white}, ${theme.palette.primary.light})`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  mb: 1
+                }}
+              >
+                ค่ายคอม PSU SciCamp
+              </Typography>
+              <Typography 
+                variant="h6" 
+                color="primary.light" 
+                sx={{ 
+                  fontWeight: 300,
+                  mb: 3,
+                  opacity: 0.9
+                }}
+              >
+                สร้างนักพัฒนารุ่นใหม่ หัวใจเทคโนโลยี
+              </Typography>
+            </Box>
+          </Fade>
 
-          <Grid item xs={12} sm={10} md={8}>
-            <Fade in={loaded} timeout={1200} style={getAnimationDelay(2)}>
+          <Fade in={loaded} timeout={1200} style={getAnimationDelay(2)}>
+            <Box sx={{ width: { xs: '100%', sm: '83.33%', md: '66.67%' } }}>
               <Typography 
                 variant="body1" 
                 color="text.secondary" 
@@ -194,11 +195,11 @@ export default function Home() {
                 <br />
                 เรียนรู้การเขียนโปรแกรม พัฒนาทักษะดิจิทัล สร้างแรงบันดาลใจ และเติบโตไปด้วยกัน
               </Typography>
-            </Fade>
-          </Grid>
+            </Box>
+          </Fade>
 
-          <Grid item xs={12} sm={10} md={8}>
-            <Fade in={loaded} timeout={1400} style={getAnimationDelay(3)}>
+          <Fade in={loaded} timeout={1400} style={getAnimationDelay(3)}>
+            <Box sx={{ width: { xs: '100%', sm: '83.33%', md: '66.67%' } }}>
               <Stack 
                 direction={{ xs: "column", sm: "row" }} 
                 spacing={2} 
@@ -244,9 +245,9 @@ export default function Home() {
                   รายละเอียดค่าย
                 </Button>
               </Stack>
-            </Fade>
-          </Grid>
-        </Grid>
+            </Box>
+          </Fade>
+        </Stack>
 
         {/* Features Section */}
         <Fade in={loaded} timeout={1600} style={getAnimationDelay(4)}>
@@ -261,9 +262,17 @@ export default function Home() {
               mb: 8
             }}
           >
-            <Grid container spacing={4}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', mx: -2 }}>
               {features.map((feature, index) => (
-                <Grid item xs={12} md={4} key={index}>
+                <Box 
+                  key={index} 
+                  sx={{ 
+                    width: { xs: '100%', md: '33.33%' }, 
+                    px: 2,
+                    mb: { xs: 4, md: 0 },
+                    '&:last-child': { mb: 0 }
+                  }}
+                >
                   <Box
                     sx={{
                       display: "flex",
@@ -300,9 +309,9 @@ export default function Home() {
                       {feature.description}
                     </Typography>
                   </Box>
-                </Grid>
+                </Box>
               ))}
-            </Grid>
+            </Box>
           </Paper>
         </Fade>
 
