@@ -1,26 +1,260 @@
-@import "tailwindcss";
+/* Add to your globals.css file */
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Pixelated rendering for images */
+.pixel-image {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Pixel noise effect */
+.pixel-noise {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2000;
+  opacity: 0.05;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAABSJJREFUaEPVmsF1W0cMhmeolx6UE/golnyCKCeIfALLJ7B0AssnkH0CySeQfALJJxB9AtEnMH0CnVJSLk9DZvTkJ0ryexKpXb0o70l60nyYwWAwGB44fPhEL8rBwcHs7OzsyTdRNXn37t2fZ2dnF/v7+38sFot/H+LWDwICCJubmy8A8FkpVSqlnH/s9XpdGWMuAPCLc+7NycnJu/sEvBeQo6OjJ1VVvTbGvPQA/K+HbOYXpdSlUurb0dHRt/PzczeUoKFAKMSvlVK/KaW+CCHQwD8lLuZGqerKWvuHtfbVUDCDgHCpGGN+N8Y8U0qZIcb79Fmfj3Pu0lr7vZTy6urq6nwIqN5A2Ih1XT9XSr3KzUjMeK5/6rpWSqmz1KxzrjLGfNRav+/rfxJIqHIAfL0OEJ23dV3fcGuIZVkYY35SSn1JZY1z7qK19vs+5ZYEwlLyRmM9x2Y02u1OzgxnP5oNtJaGASXJJIFwMIxGCQWC0TZQaM2+QSk1Q8Q5YYx5pbX+mPR02/7ixRFAgGbCGENp7xyN9uPwQNiLjAPjEOccSo0pZx3KVLWu69MhxhEICQIgbHY2FEzNAuCGUZSirfC5qhDnALA/pMQJJGV85Lq+j6j/Lx9GjWbS1g9pjKHSmq1jWAGAv7XWzb/vbm+8/f39J8aYs+zMTPTGN7RYDVt2JJWcnZ0lS4JAKOy6oZRrmBrACyVnYs5Rl7VeQ7CstT8gInsBjYkdGWPOxoIYMx9fI7bWnkptI4EEEhuMdYWYFjmkrIxwjL94xvn5+Y9ra7CU0gDgmXAepXXXOLX3CDDVrLVfEPFGKxEIggA4/SgB2dra2lJKvVdK/cz9RACDSZVSWwCwDQDrWGfYOXfROEP3dGsT0lq/FEA8IzmxVIIAQESv9NZv377dU0pFSwMQXyUxiAsAfGWt/TmFQghxAPC39vrOzs6T7e3tF0VRRPMOEYOvR2v9WoRWIBCQAEhbOHiTW1tbe1rrE9Gf1r6qTu/pXbLJb21tbRhjfnLO7VlrD6WSIpCQeNkZSSlvM62UeiuWSZ36Xtzc3HxRSpXGmF3nXEUgYfVOgphSVn0SuoGyvr7+TGv9SBSgrgNPVOx2gK0lHyJKaYaIxQ3I2FKJgciVmFJE0rptOCxNY+tYLZxfY62FeMzAzAHADBEXAoDDdpB56wKRArAtzJqXRCQFSEQpZrRdWfUllCvJ0EFCwsqVUSzJ4gCLScgwICKIZQGQuxj/i0JiKQBAFxWBiCDY+cdIzOTdTm+NrhPRJBAJQgpEY+wzRLyRU7EcEJEgpUBwL/iFiNFUL2vE6+PngnMXAPhcFEVdFIUoJTYLOUlXCkQCQcQPRVEsBRKAoMiqc4O3Hy+KAqb446dSysWPpnItl/NxiURlJWZgMFHpKK2btvn5+fnfofKt63qGiKLnGzDGzMU1iURlJZVYXXJhOCeaxPSfY7HYyVi8f1EUsyRTJUkXB9kSXyQQuXGJyVdWVvbm8/lpq8SoIeZEuOvwc6SU0rQNzufzPUQUoQiFQHJxJBaKiEAVWH1jl7twLSs3TtfpuXEE0jA5N8aaflJOECGi2TLU0nfS2TlCckXoEEkk5fTWiAYgIkp2HQOJ5cqp7/pkEm2ZZG6xdR8gUp00JyQQwcjBkG7+MUZuTkzVW6QE73rPbG5u3rI7pNa+U3mNfv8v5o3EDZ3rnssAAAAASUVORK5CYII=");
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Glitch animation for text */
+.glitch-text {
+  position: relative;
+  animation: glitch-skew 3s infinite linear alternate-reverse;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -2px 0 #ff00c1;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  left: -2px;
+  text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+  animation: glitch-anim2 1s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% {
+    clip: rect(80px, 9999px, 69px, 0);
+    transform: skew(0.64deg);
+  }
+  5% {
+    clip: rect(39px, 9999px, 17px, 0);
+    transform: skew(0.51deg);
+  }
+  10% {
+    clip: rect(6px, 9999px, 72px, 0);
+    transform: skew(0.48deg);
+  }
+  15% {
+    clip: rect(11px, 9999px, 13px, 0);
+    transform: skew(0.1deg);
+  }
+  20% {
+    clip: rect(9px, 9999px, 100px, 0);
+    transform: skew(0.51deg);
+  }
+  25% {
+    clip: rect(42px, 9999px, 53px, 0);
+    transform: skew(0.53deg);
+  }
+  30% {
+    clip: rect(68px, 9999px, 23px, 0);
+    transform: skew(0.23deg);
+  }
+  35% {
+    clip: rect(45px, 9999px, 37px, 0);
+    transform: skew(0.28deg);
+  }
+  40% {
+    clip: rect(31px, 9999px, 40px, 0);
+    transform: skew(0.87deg);
+  }
+  45% {
+    clip: rect(96px, 9999px, 57px, 0);
+    transform: skew(0.58deg);
+  }
+  50% {
+    clip: rect(17px, 9999px, 1px, 0);
+    transform: skew(0.4deg);
+  }
+  55% {
+    clip: rect(25px, 9999px, 77px, 0);
+    transform: skew(0.27deg);
+  }
+  60% {
+    clip: rect(64px, 9999px, 20px, 0);
+    transform: skew(0.23deg);
+  }
+  65% {
+    clip: rect(25px, 9999px, 64px, 0);
+    transform: skew(0.1deg);
+  }
+  70% {
+    clip: rect(81px, 9999px, 11px, 0);
+    transform: skew(0.92deg);
+  }
+  75% {
+    clip: rect(43px, 9999px, 23px, 0);
+    transform: skew(0.83deg);
+  }
+  80% {
+    clip: rect(92px, 9999px, 29px, 0);
+    transform: skew(0.67deg);
+  }
+  85% {
+    clip: rect(4px, 9999px, 93px, 0);
+    transform: skew(0.84deg);
+  }
+  90% {
+    clip: rect(23px, 9999px, 30px, 0);
+    transform: skew(0.67deg);
+  }
+  95% {
+    clip: rect(79px, 9999px, 73px, 0);
+    transform: skew(0.95deg);
+  }
+  100% {
+    clip: rect(86px, 9999px, 80px, 0);
+    transform: skew(0.47deg);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes glitch-anim2 {
+  0% {
+    clip: rect(13px, 9999px, 76px, 0);
+    transform: skew(0.19deg);
+  }
+  5% {
+    clip: rect(63px, 9999px, 58px, 0);
+    transform: skew(0.33deg);
+  }
+  10% {
+    clip: rect(86px, 9999px, 69px, 0);
+    transform: skew(0.28deg);
+  }
+  15% {
+    clip: rect(51px, 9999px, 97px, 0);
+    transform: skew(0.11deg);
+  }
+  20% {
+    clip: rect(38px, 9999px, 65px, 0);
+    transform: skew(0.79deg);
+  }
+  25% {
+    clip: rect(45px, 9999px, 23px, 0);
+    transform: skew(0.69deg);
+  }
+  30% {
+    clip: rect(21px, 9999px, 5px, 0);
+    transform: skew(0.4deg);
+  }
+  35% {
+    clip: rect(11px, 9999px, 95px, 0);
+    transform: skew(0.36deg);
+  }
+  40% {
+    clip: rect(38px, 9999px, 1px, 0);
+    transform: skew(0.5deg);
+  }
+  45% {
+    clip: rect(76px, 9999px, 12px, 0);
+    transform: skew(0.34deg);
+  }
+  50% {
+    clip: rect(10px, 9999px, 44px, 0);
+    transform: skew(0.9deg);
+  }
+  55% {
+    clip: rect(100px, 9999px, 23px, 0);
+    transform: skew(0.25deg);
+  }
+  60% {
+    clip: rect(25px, 9999px, 27px, 0);
+    transform: skew(0.24deg);
+  }
+  65% {
+    clip: rect(38px, 9999px, 57px, 0);
+    transform: skew(0.98deg);
+  }
+  70% {
+    clip: rect(24px, 9999px, 33px, 0);
+    transform: skew(0.61deg);
+  }
+  75% {
+    clip: rect(48px, 9999px, 99px, 0);
+    transform: skew(0.04deg);
+  }
+  80% {
+    clip: rect(7px, 9999px, 87px, 0);
+    transform: skew(0.47deg);
+  }
+  85% {
+    clip: rect(34px, 9999px, 41px, 0);
+    transform: skew(0.23deg);
+  }
+  90% {
+    clip: rect(21px, 9999px, 85px, 0);
+    transform: skew(0.57deg);
+  }
+  95% {
+    clip: rect(35px, 9999px, 50px, 0);
+    transform: skew(0.77deg);
+  }
+  100% {
+    clip: rect(99px, 9999px, 31px, 0);
+    transform: skew(0.87deg);
+  }
+}
+
+@keyframes glitch-skew {
+  0% {
+    transform: skew(1deg);
+  }
+  10% {
+    transform: skew(-1deg);
+  }
+  20% {
+    transform: skew(0deg);
+  }
+  30% {
+    transform: skew(-2deg);
+  }
+  40% {
+    transform: skew(1deg);
+  }
+  50% {
+    transform: skew(-2deg);
+  }
+  60% {
+    transform: skew(0deg);
+  }
+  70% {
+    transform: skew(-1deg);
+  }
+  80% {
+    transform: skew(0deg);
+  }
+  90% {
+    transform: skew(2deg);
+  }
+  100% {
+    transform: skew(-1deg);
+  }
 }

@@ -1,354 +1,238 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import Timeline from "@/components/Timeline";
-import FAQAccordion from '@/components/FAQAccordion';
-import { 
-  Box, 
-  Button, 
-  Container, 
-  Typography, 
-  Paper, 
-  useTheme, 
-  alpha, 
-  Fade, 
-  Divider,
-  Chip,
-  Stack
-} from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import SchoolIcon from "@mui/icons-material/School";
-import CodeIcon from "@mui/icons-material/Code";
+import { Box, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
-export default function Home() {
-  const theme = useTheme();
-  const [loaded, setLoaded] = useState(false);
-  
+export default function ComingSoon() {
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [glitchActive, setGlitchActive] = useState(false);
+
   useEffect(() => {
-    setLoaded(true);
+    const interval = setInterval(() => {
+      setLoadingProgress((prev) => {
+        if (prev >= 87) {
+          clearInterval(interval);
+          setGlitchActive(true);
+          return 87;
+        }
+        return prev + Math.floor(Math.random() * 5) + 1;
+      });
+    }, 400);
+
+    return () => clearInterval(interval);
   }, []);
 
-  const features = [
-    {
-      icon: <CodeIcon sx={{ fontSize: 36 }} />,
-      title: "เรียนรู้การเขียนโค้ด",
-      description: "พัฒนาทักษะการเขียนโปรแกรมจากผู้เชี่ยวชาญ"
-    },
-    {
-      icon: <SchoolIcon sx={{ fontSize: 36 }} />,
-      title: "เตรียมความพร้อม",
-      description: "เตรียมตัวสู่การเรียนในมหาวิทยาลัย"
-    },
-    {
-      icon: <CalendarTodayIcon sx={{ fontSize: 36 }} />,
-      title: "กิจกรรมสร้างสรรค์",
-      description: "ร่วมกิจกรรมสนุกๆ สร้างมิตรภาพใหม่"
-    }
-  ];
+  const binaryText =
+    "01001100 01001111 01000001 01000100 01001001 01001110 01000111 00100000 01000101 01001110 01000011 01010010 01011001 01010000 01010100 01001001 01001111 01001110 00100000 01010011 01000101 01010001 01010101 01000101 01001110 01000011 01000101";
 
-  // Animation timings for staggered effect
-  const getAnimationDelay = (index: number) => ({
-    transitionDelay: `${index * 150}ms`,
-  });
-  
   return (
     <Box
       sx={{
         minHeight: "100vh",
-        background: `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${alpha(theme.palette.primary.dark, 0.1)} 100%)`,
-        pt: { xs: 4, md: 6 },
-        pb: { xs: 12, md: 8 }, // Extra padding on mobile for navbar
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#051628",
+        position: "relative",
         overflow: "hidden",
-        position: "relative"
+        fontFamily: "'Press Start 2P', cursive",
       }}
     >
-      {/* Background elements */}
+      {/* Pixel Grid Background */}
       <Box
         sx={{
           position: "absolute",
-          top: -100,
-          left: -100,
-          width: 500,
-          height: 500,
-          background: `radial-gradient(circle, ${alpha(theme.palette.primary.main, 0.1)} 0%, transparent 70%)`,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `linear-gradient(rgba(0, 128, 255, 0.05) 1px, transparent 1px),
+                           linear-gradient(90deg, rgba(0, 128, 255, 0.05) 1px, transparent 1px)`,
+          backgroundSize: "20px 20px",
+          zIndex: 1,
+        }}
+      />
+
+      {/* Glowing Orbs */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: "20%",
+          left: "10%",
+          width: "150px",
+          height: "150px",
           borderRadius: "50%",
-          filter: "blur(60px)",
-          zIndex: 0
+          background: "rgba(0, 96, 214, 0.15)",
+          filter: "blur(40px)",
+          animation: "float 8s infinite ease-in-out",
+          zIndex: 0,
+          willChange: "transform",
         }}
       />
       <Box
         sx={{
           position: "absolute",
-          bottom: -100,
-          right: -100,
-          width: 400,
-          height: 400,
-          background: `radial-gradient(circle, ${alpha(theme.palette.secondary.main, 0.1)} 0%, transparent 70%)`,
+          bottom: "15%",
+          right: "15%",
+          width: "180px",
+          height: "180px",
           borderRadius: "50%",
-          filter: "blur(60px)",
-          zIndex: 0
+          background: "rgba(0, 186, 255, 0.1)",
+          filter: "blur(50px)",
+          animation: "float 10s infinite ease-in-out reverse",
+          zIndex: 0,
+          willChange: "transform",
         }}
       />
 
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-        {/* Hero Section - Using Stack instead of Grid */}
-        <Stack 
-          spacing={4} 
-          direction="column" 
-          alignItems="center" 
-          textAlign="center" 
-          sx={{ mb: 8 }}
-        >
-          <Fade in={loaded} timeout={800}>
-            <Box sx={{ position: "relative", mb: 2 }}>
-              <Box
-                sx={{
-                  position: "absolute",
-                  inset: -2,
-                  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                  borderRadius: "50%",
-                  opacity: 0.2,
-                  animation: "pulse 2s infinite",
-                  "@keyframes pulse": {
-                    "0%": { opacity: 0.2, transform: "scale(1)" },
-                    "50%": { opacity: 0.3, transform: "scale(1.05)" },
-                    "100%": { opacity: 0.2, transform: "scale(1)" }
-                  }
-                }}
-              />
-              <Paper
-                elevation={6}
-                sx={{
-                  p: 1,
-                  borderRadius: "50%",
-                  background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(theme.palette.secondary.main, 0.1)})`,
-                  backdropFilter: "blur(10px)",
-                  border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`
-                }}
-              >
-                <Image
-                  src="/camp-logo.svg"
-                  alt="Camp Logo"
-                  width={140}
-                  height={140}
-                  style={{ borderRadius: "50%" }}
-                />
-              </Paper>
-              <Chip
-                label="ปี 25"
-                color="primary"
-                sx={{
-                  position: "absolute",
-                  bottom: 10,
-                  right: -5,
-                  fontWeight: "bold",
-                  boxShadow: 2
-                }}
-              />
-            </Box>
-          </Fade>
-
-          <Fade in={loaded} timeout={1000} style={getAnimationDelay(1)}>
-            <Box>
-              <Typography
-                variant="h2"
-                component="h1" 
-                sx={{
-                  fontWeight: 800,
-                  fontSize: { xs: "2rem", sm: "3rem", md: "3.5rem" },
-                  background: `linear-gradient(135deg, ${theme.palette.common.white}, ${theme.palette.primary.light})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  mb: 1
-                }}
-              >
-                ค่ายคอม PSU SciCamp
-              </Typography>
-              <Typography 
-                variant="h6" 
-                color="primary.light" 
-                sx={{ 
-                  fontWeight: 300,
-                  mb: 3,
-                  opacity: 0.9
-                }}
-              >
-                สร้างนักพัฒนารุ่นใหม่ หัวใจเทคโนโลยี
-              </Typography>
-            </Box>
-          </Fade>
-
-          <Fade in={loaded} timeout={1200} style={getAnimationDelay(2)}>
-            <Box sx={{ width: { xs: '100%', sm: '83.33%', md: '66.67%' } }}>
-              <Typography 
-                variant="body1" 
-                color="text.secondary" 
-                sx={{ 
-                  lineHeight: 1.7,
-                  fontSize: { xs: "1rem", md: "1.1rem" }
-                }}
-              >
-                ยินดีต้อนรับสู่ค่ายคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยสงขลานครินทร์
-                <br />
-                เรียนรู้การเขียนโปรแกรม พัฒนาทักษะดิจิทัล สร้างแรงบันดาลใจ และเติบโตไปด้วยกัน
-              </Typography>
-            </Box>
-          </Fade>
-
-          <Fade in={loaded} timeout={1400} style={getAnimationDelay(3)}>
-            <Box sx={{ width: { xs: '100%', sm: '83.33%', md: '66.67%' } }}>
-              <Stack 
-                direction={{ xs: "column", sm: "row" }} 
-                spacing={2} 
-                sx={{ mt: 2, width: "100%", justifyContent: "center" }}
-              >
-                <Button
-                  variant="contained"
-                  size="large"
-                  endIcon={<ArrowForwardIcon />}
-                  component={Link}
-                  href="/register"
-                  sx={{
-                    borderRadius: "28px",
-                    px: 4,
-                    py: 1.5,
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                    transition: "all 0.3s",
-                    fontWeight: 600,
-                    "&:hover": {
-                      transform: "translateY(-2px)",
-                      boxShadow: `0 8px 20px -6px ${alpha(theme.palette.primary.main, 0.6)}`
-                    }
-                  }}
-                >
-                  สมัครเข้าค่าย
-                </Button>
-                <Button
-                  variant="outlined"
-                  size="large"
-                  component={Link}
-                  href="/about"
-                  sx={{
-                    borderRadius: "28px",
-                    px: 4,
-                    py: 1.5,
-                    borderColor: alpha(theme.palette.primary.main, 0.3),
-                    "&:hover": {
-                      borderColor: theme.palette.primary.main,
-                      background: alpha(theme.palette.primary.main, 0.05)
-                    }
-                  }}
-                >
-                  รายละเอียดค่าย
-                </Button>
-              </Stack>
-            </Box>
-          </Fade>
-        </Stack>
-
-        {/* Features Section */}
-        <Fade in={loaded} timeout={1600} style={getAnimationDelay(4)}>
-          <Paper
-            elevation={4}
+      <Container maxWidth="sm" sx={{ position: "relative", zIndex: 2, textAlign: "center" }}>
+        {/* Logo */}
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 5 }}>
+          <Box
             sx={{
-              p: { xs: 3, md: 5 },
-              borderRadius: 4,
-              background: alpha(theme.palette.background.paper, 0.7),
-              backdropFilter: "blur(10px)",
-              border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-              mb: 8
+              border: "4px solid #0080ff",
+              borderStyle: "dashed",
+              borderRadius: "12px",
+              p: 2,
+              position: "relative",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: -8,
+                left: -8,
+                right: -8,
+                bottom: -8,
+                borderRadius: "16px",
+                background: "rgba(0, 128, 255, 0.1)",
+                zIndex: -1,
+              },
             }}
           >
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', mx: -2 }}>
-              {features.map((feature, index) => (
-                <Box 
-                  key={index} 
-                  sx={{ 
-                    width: { xs: '100%', md: '33.33%' }, 
-                    px: 2,
-                    mb: { xs: 4, md: 0 },
-                    '&:last-child': { mb: 0 }
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      textAlign: "center",
-                      p: 2,
-                      height: "100%",
-                      transition: "transform 0.3s",
-                      "&:hover": {
-                        transform: "translateY(-5px)"
-                      }
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: 80,
-                        height: 80,
-                        borderRadius: "50%",
-                        background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(theme.palette.secondary.main, 0.1)})`,
-                        color: theme.palette.primary.main,
-                        mb: 2
-                      }}
-                    >
-                      {feature.icon}
-                    </Box>
-                    <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
-                      {feature.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {feature.description}
-                    </Typography>
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-          </Paper>
-        </Fade>
-
-        {/* Timeline Section */}
-        <Fade in={loaded} timeout={1800} style={getAnimationDelay(5)}>
-          <Box>
-            <Box sx={{ mb: 4, textAlign: "center" }}>
-              <Chip 
-                label="กำหนดการ" 
-                color="primary" 
-                variant="outlined" 
-                sx={{ mb: 2 }} 
-              />
-              <Typography 
-                variant="h4" 
-                sx={{ 
-                  fontWeight: 700,
-                  mb: 1
-                }}
-              >
-                ไทม์ไลน์กิจกรรม
-              </Typography>
-              <Divider 
-                sx={{ 
-                  width: "60px", 
-                  mx: "auto", 
-                  borderColor: theme.palette.primary.main,
-                  borderWidth: 2,
-                  mb: 6
-                }} 
-              />
-            </Box>
-            
-            <Timeline />
-            <FAQAccordion />
+            <Image
+              src="/images/PSU-SCC-LOGO 2.svg"
+              alt="Camp Logo"
+              width={160}
+              height={160}
+              style={{ display: "block" }}
+            />
           </Box>
-        </Fade>
+        </Box>
+
+        {/* Dates */}
+        <Box
+          sx={{
+            mb: 6,
+            p: 2,
+            background: "rgba(0, 40, 80, 0.4)",
+            border: "2px solid #0060cc",
+            borderRadius: "8px",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "1.2rem",
+              color: "#4dc3ff",
+              letterSpacing: "1px",
+              fontFamily: "'VT323', monospace",
+              textShadow: "2px 2px 0px rgba(0,0,0,0.5)",
+            }}
+          >
+            * * XXXX * *
+          </Typography>
+        </Box>
+
+        {/* Coming Soon */}
+        <Box
+          className={glitchActive ? "glitch" : ""}
+          sx={{
+            mb: 6,
+            position: "relative",
+            "&.glitch": {
+              animation: "glitch 1s infinite",
+            },
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: { xs: "1.8rem", md: "2.5rem" },
+              fontWeight: "bold",
+              color: "#ffffff",
+              textShadow: "0 0 10px rgba(0, 160, 255, 0.7), 0 0 20px rgba(0, 128, 255, 0.5)",
+              fontFamily: "'Press Start 2P', cursive",
+              letterSpacing: "2px",
+            }}
+          >
+            COMING SOON
+          </Typography>
+        </Box>
+
+        {/* Loading Bar */}
+        <Box
+          sx={{
+            position: "relative",
+            height: "30px",
+            background: "rgba(0, 40, 80, 0.5)",
+            borderRadius: "4px",
+            border: "2px solid #0070dd",
+            overflow: "hidden",
+            mb: 2,
+          }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: "100%",
+              width: `${loadingProgress}%`,
+              background: glitchActive
+                ? "repeating-linear-gradient(45deg, #ff2222, #ff2222 10px, #ff6644 10px, #ff6644 20px)"
+                : "linear-gradient(90deg, #0088ff, #00ccff)",
+              transition: "width 0.3s ease-out",
+            }}
+          />
+        </Box>
+
+        {/* Loading Status */}
+        <Typography
+          sx={{
+            color: glitchActive ? "#ff4444" : "#4dc3ff",
+            fontSize: "0.8rem",
+            fontFamily: "'VT323', monospace",
+            letterSpacing: "1px",
+            mt: 1,
+          }}
+        >
+          {glitchActive ? "ERR0R: SYSTEM FAILURE - RETRY LATER" : `LOADING DATA... ${loadingProgress}%`}
+        </Typography>
+
+        {/* Encryption Text */}
+        <Box
+          sx={{
+            mt: 6,
+            p: 2,
+            background: "rgba(0, 40, 80, 0.4)",
+            border: "1px solid #0060cc",
+            borderRadius: "8px",
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
+          <Typography
+            sx={{
+              color: "#00cc99",
+              fontSize: "0.7rem",
+              fontFamily: "monospace",
+              letterSpacing: "1px",
+              whiteSpace: "nowrap",
+              animation: "scroll 20s linear infinite",
+            }}
+          >
+            {binaryText}
+          </Typography>
+        </Box>
       </Container>
     </Box>
   );
