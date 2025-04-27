@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Press_Start_2P, VT323 } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from "@/components/ConditionalLayout";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,9 +16,35 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+// เพิ่มฟอนต์ Press Start 2P และ VT323 ผ่าน next/font
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  variable: "--font-press-start-2p",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const vt323 = VT323({
+  weight: "400",
+  variable: "--font-vt323",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "PSU SciCamp - Coming Soon",
   description: "PSU SciCamp ค่ายคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยสงขลานครินทร์",
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.png', type: 'image/png', sizes: '32x32' },
+      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -27,13 +54,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th" suppressHydrationWarning>
+      <head>
+        {/* Import additional favicon links that aren't covered by metadata */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#051628" />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${pressStart2P.variable} ${vt323.variable} min-h-screen antialiased`}
         style={{ margin: 0, padding: 0, backgroundColor: "#051628" }}
       >
         <ConditionalLayout>
           {children}
         </ConditionalLayout>
+        <Footer />
       </body>
     </html>
   );

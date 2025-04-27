@@ -7,20 +7,17 @@ import { usePathname } from "next/navigation";
 
 // MUI Components
 import {
-  AppBar,
   Box,
-  Button,
-  Container,
-  Paper,
-  BottomNavigation,
-  BottomNavigationAction,
-  Toolbar,
-  Typography,
+  Fab,
+  Zoom,
+  Tooltip,
   alpha,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 
 // MUI Icons
+import CloseIcon from "@mui/icons-material/Close";
 import SchoolIcon from "@mui/icons-material/School";
 import PersonIcon from "@mui/icons-material/Person";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -28,37 +25,20 @@ import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import HomeIcon from "@mui/icons-material/Home";
 
-export default function PixelNavbar() {
+export default function VerticalNavbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isGlitching, setIsGlitching] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
   const theme = useTheme();
+  
+  // Responsive design
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
-  // Use state instead of mediaQuery for SSR compatibility
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
-
-  // Handle mounting and media queries safely
+  // Handle mounting and random glitch effect
   useEffect(() => {
     setIsMounted(true);
-
-    // Set initial values
-    setIsMobile(window.innerWidth < theme.breakpoints.values.md);
-    setIsTablet(
-      window.innerWidth >= theme.breakpoints.values.sm &&
-      window.innerWidth < theme.breakpoints.values.md
-    );
-
-    // Add resize listener
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < theme.breakpoints.values.md);
-      setIsTablet(
-        window.innerWidth >= theme.breakpoints.values.sm &&
-        window.innerWidth < theme.breakpoints.values.md
-      );
-    };
-
-    window.addEventListener("resize", handleResize);
 
     // Random glitch effect
     const glitchInterval = setInterval(() => {
@@ -69,10 +49,9 @@ export default function PixelNavbar() {
     }, 3000);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
       clearInterval(glitchInterval);
     };
-  }, [theme.breakpoints.values.md, theme.breakpoints.values.sm]);
+  }, []);
 
   const navItems = [
     { name: "หน้าหลัก", path: "/", icon: <HomeIcon /> },
@@ -88,41 +67,47 @@ export default function PixelNavbar() {
     return null;
   }
 
-  // Desktop Navigation
-  const desktopNavbar = (
-    <AppBar
-      position="fixed"
-      component="div"
-      sx={{
-        top: 16,
-        left: 16,
-        right: 16,
-        width: "auto",
-        background: "transparent",
-        boxShadow: "none",
-        backdropFilter: "none",
-        transition: "transform 0.2s",
-        transform: isGlitching ? "translateX(2px)" : "none",
-        zIndex: 1200,
-      }}
-    >
-      <Container
-        maxWidth={false}
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  return (
+    <>
+      {/* Main container for the vertical navbar */}
+      <Box
         sx={{
-          px: isTablet ? 1 : 3,
-          maxWidth: "1920px",
+          position: "fixed",
+          right: isMobile ? 12 : 16,
+          top: isMobile ? "auto" : "50%",
+          bottom: isMobile ? 16 : "auto",
+          transform: isMobile 
+            ? (isGlitching ? "translateX(2px)" : "none") 
+            : `translateY(-50%) ${isGlitching ? "translateX(2px)" : ""}`,
+          zIndex: 1300,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          transition: "transform 0.2s",
         }}
       >
-        <Toolbar
-          disableGutters
+        {/* Main menu button with logo */}
+        <Fab
+          color="primary"
+          aria-label="menu"
+          onClick={toggleMenu}
           sx={{
-            py: 1,
-            px: isTablet ? 1 : 2,
+            mb: isMenuOpen ? 2 : 0,
             bgcolor: alpha("#051628", 0.9),
-            backdropFilter: "blur(10px)",
             border: "2px solid #0070ff",
-            borderRadius: "12px",
+            color: "#4dc3ff",
+            width: isMobile ? 50 : 56,
+            height: isMobile ? 50 : 56,
             position: "relative",
+            boxShadow: `0 0 12px ${alpha("#0070ff", 0.3)}`,
+            "&:hover": {
+              bgcolor: alpha("#051628", 0.95),
+              boxShadow: `0 0 16px ${alpha("#0070ff", 0.5)}`,
+            },
             "&::before": {
               content: '""',
               position: "absolute",
@@ -130,6 +115,7 @@ export default function PixelNavbar() {
               left: 0,
               right: 0,
               bottom: 0,
+              borderRadius: "50%",
               background:
                 "linear-gradient(transparent 0%, rgba(0, 16, 32, 0.1) 50%, transparent 100%)",
               backgroundSize: "100% 4px",
@@ -139,271 +125,147 @@ export default function PixelNavbar() {
             },
           }}
         >
-          {/* Logo */}
-          <Box
-            component={Link}
-            href="/"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              mr: 2,
-              textDecoration: "none",
-            }}
-          >
+          {isMenuOpen ? (
+            <CloseIcon />
+          ) : (
             <Box
               sx={{
                 position: "relative",
-                width: 40,
-                height: 40,
-                mr: 1,
-                border: "1px solid rgba(0, 128, 255, 0.5)",
-                borderRadius: "8px",
-                p: 0.5,
+                width: isMobile ? 30 : 34,
+                height: isMobile ? 30 : 34,
+                borderRadius: "50%",
+                overflow: "hidden",
               }}
             >
               <Image
                 src="/images/PSU-SCC-LOGO 2.svg"
-                alt="Logo"
+                alt="PSU SciCamp Logo"
                 fill
                 style={{ objectFit: "contain" }}
                 priority
               />
             </Box>
-            <Typography
-              variant="h6"
-              noWrap
-              sx={{
-                display: "flex",
-                fontFamily: "'Press Start 2P', cursive",
-                fontSize: "14px",
-                fontWeight: 700,
-                color: "#4dc3ff",
-                textDecoration: "none",
-              }}
-            >
-              PSU SciCamp
-            </Typography>
-          </Box>
+          )}
+        </Fab>
 
-          {/* Desktop menu */}
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: "flex",
-              justifyContent: "center",
-              overflowX: isTablet ? "auto" : "visible",
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
-              msOverflowStyle: "none",
-              scrollbarWidth: "none",
+        {/* Navigation items shown when menu is open */}
+        {navItems.map((item, index) => (
+          <Zoom
+            key={item.path}
+            in={isMenuOpen}
+            style={{
+              transitionDelay: isMenuOpen ? `${100 * (navItems.length - index)}ms` : "0ms",
             }}
           >
-            {navItems.map((item, index) => {
-              // Skip home on desktop nav
-              if (index === 0) return null;
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                mb: 2,
+                opacity: isMenuOpen ? 1 : 0,
+                transition: "opacity 0.3s ease",
+              }}
+            >
+              {/* Text label with pixel theme - hide on mobile */}
+              {!isMobile && (
+                <Tooltip title={item.name} placement="left" arrow>
+                  <Box
+                    component={Link}
+                    href={item.path}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      textDecoration: "none",
+                      mr: 2,
+                      fontSize: isTablet ? "16px" : "18px",
+                      color: pathname === item.path ? "#ffffff" : "#78c6ff",
+                      fontFamily: "'VT323', monospace",
+                      bgcolor: pathname === item.path ? alpha("#0070ff", 0.2) : "transparent",
+                      p: 1,
+                      borderRadius: "4px",
+                      border: pathname === item.path ? "1px solid #0070ff" : "1px solid transparent",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        color: "#ffffff",
+                        bgcolor: alpha("#0070ff", 0.3),
+                      },
+                    }}
+                  >
+                    {item.name}
+                  </Box>
+                </Tooltip>
+              )}
 
-              const isActive = pathname === item.path;
-              return (
-                <Button
-                  key={item.path}
+              {/* Circular button with icon */}
+              <Tooltip title={isMobile ? item.name : ""} placement="left">
+                <Fab
                   component={Link}
                   href={item.path}
-                  startIcon={item.icon}
+                  size={isMobile ? "small" : "medium"}
                   sx={{
-                    mx: isTablet ? 0.25 : 0.5,
-                    px: isTablet ? 1 : 2,
-                    py: 1,
-                    color: isActive ? "#ffffff" : "#78c6ff",
-                    backgroundColor: isActive
-                      ? alpha("#0070ff", 0.3)
-                      : "transparent",
-                    borderBottom: isActive ? "2px solid #4dc3ff" : "none",
-                    borderRadius: 0,
-                    fontFamily: "'VT323', monospace",
-                    fontSize: isTablet ? "16px" : "18px",
-                    textTransform: "none",
-                    position: "relative",
-                    flexShrink: 0,
-                    whiteSpace: "nowrap",
+                    bgcolor: pathname === item.path ? alpha("#0070ff", 0.3) : alpha("#051628", 0.9),
+                    border: "2px solid #0070ff",
+                    color: pathname === item.path ? "#ffffff" : "#4dc3ff",
+                    width: isMobile ? 40 : 48,
+                    height: isMobile ? 40 : 48,
+                    boxShadow: pathname === item.path
+                      ? `0 0 10px ${alpha("#0070ff", 0.4)}`
+                      : `0 0 8px ${alpha("#0070ff", 0.2)}`,
                     "&:hover": {
-                      backgroundColor: alpha("#0070ff", 0.2),
-                      color: "#4dc3ff",
-                      "&::after": {
-                        width: "100%",
-                      },
+                      bgcolor: alpha("#051628", 0.95),
+                      boxShadow: `0 0 12px ${alpha("#0070ff", 0.5)}`,
+                      color: "#ffffff",
                     },
-                    "&::after": {
+                    "&::before": {
                       content: '""',
                       position: "absolute",
-                      bottom: 0,
+                      top: 0,
                       left: 0,
-                      width: isActive ? "100%" : "0%",
-                      height: "2px",
-                      backgroundColor: "#4dc3ff",
-                      transition: "width 0.3s ease",
+                      right: 0,
+                      bottom: 0,
+                      borderRadius: "50%",
+                      background:
+                        "linear-gradient(transparent 0%, rgba(0, 16, 32, 0.1) 50%, transparent 100%)",
+                      backgroundSize: "100% 4px",
+                      pointerEvents: "none",
+                      zIndex: 1,
+                      opacity: 0.3,
                     },
                   }}
                 >
-                  {item.name}
-                </Button>
-              );
-            })}
-          </Box>
-        </Toolbar>
+                  {item.icon}
+                </Fab>
+              </Tooltip>
+            </Box>
+          </Zoom>
+        ))}
+      </Box>
 
-        {/* Decorative pixel line */}
+      {/* Background overlay when menu is open - to help capture click events to close menu */}
+      {isMenuOpen && (
         <Box
+          onClick={() => setIsMenuOpen(false)}
           sx={{
-            position: "absolute",
+            position: "fixed",
+            top: 0,
             left: 0,
             right: 0,
-            bottom: -1,
-            height: "1px",
-            background:
-              "linear-gradient(to right, transparent, #0070ff, transparent)",
+            bottom: 0,
+            zIndex: 1200,
+            backgroundColor: isMobile ? alpha("#000", 0.3) : "transparent",
           }}
         />
-      </Container>
-    </AppBar>
-  );
-
-  // Mobile Bottom Navigation
-  const mobileNavbar = (
-    <Paper
-      elevation={3}
-      component="div"
-      sx={{
-        position: "fixed",
-        bottom: 16,
-        left: 16,
-        right: 16,
-        zIndex: 1300,
-        borderRadius: "12px",
-        overflow: "hidden",
-        bgcolor: alpha("#051628", 0.95),
-        backdropFilter: "blur(10px)",
-        border: "2px solid #0070ff",
-        boxShadow: `0 -4px 12px ${alpha("#0070ff", 0.2)}`,
-      }}
-    >
-      {/* Scanline effect overlay */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background:
-            "linear-gradient(transparent 0%, rgba(0, 16, 32, 0.1) 50%, transparent 100%)",
-          backgroundSize: "100% 4px",
-          pointerEvents: "none",
-          zIndex: 1,
-          opacity: 0.3,
-        }}
-      />
-
-      {/* Pixel border top */}
-      <Box
-        sx={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 0,
-          height: "2px",
-          background:
-            "linear-gradient(to right, transparent, #0070ff, transparent)",
-        }}
-      />
-
-      <BottomNavigation
-        value={pathname}
-        sx={{
-          bgcolor: "transparent",
-          height: 70,
-          "& .MuiBottomNavigationAction-root": {
-            color: "#78c6ff",
-            "&.Mui-selected": {
-              color: "#ffffff",
-            },
-            minWidth: 0,
-            padding: "6px 0",
-          },
-          position: "relative",
-          zIndex: 2,
-        }}
-      >
-        {navItems.map((item) => (
-          <BottomNavigationAction
-            key={item.path}
-            component={Link}
-            href={item.path}
-            value={item.path}
-            label={item.name}
-            icon={
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  transition: "transform 0.2s ease-in-out",
-                  transform:
-                    pathname === item.path ? "translateY(-4px)" : "none",
-                }}
-              >
-                {item.icon}
-                {pathname === item.path && (
-                  <Box
-                    sx={{
-                      width: "4px",
-                      height: "4px",
-                      bgcolor: "#4dc3ff",
-                      mt: 0.5,
-                      boxShadow: "0 0 6px #4dc3ff",
-                    }}
-                  />
-                )}
-              </Box>
-            }
-            sx={{
-              "&.Mui-selected": {
-                "& .MuiBottomNavigationAction-label": {
-                  fontSize: "0.75rem",
-                  transition: "font-size 0.2s, transform 0.2s",
-                  fontFamily: "'VT323', monospace",
-                },
-              },
-              "& .MuiBottomNavigationAction-label": {
-                fontFamily: "'VT323', monospace",
-                fontSize: "0.7rem",
-                marginTop: "2px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                maxWidth: "100%",
-              },
-            }}
-          />
-        ))}
-      </BottomNavigation>
-    </Paper>
-  );
-
-  // Add spacing at the top and bottom of content to account for fixed navbars
-  const contentSpacing = (
-    <Box
-      sx={{
-        pt: isMobile ? 0 : 12, // Top padding only for desktop
-        pb: isMobile ? 11 : 0, // Bottom padding only for mobile
-      }}
-    />
-  );
-
-  return (
-    <>
-      {isMobile ? mobileNavbar : desktopNavbar}
-      {contentSpacing}
+      )}
+      
+      {/* Add space to ensure content isn't hidden on mobile */}
+      {isMobile && (
+        <Box
+          sx={{
+            height: "60px",
+            width: "100%",
+          }}
+        />
+      )}
     </>
   );
 }

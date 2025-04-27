@@ -1,0 +1,777 @@
+/* Main Container */
+.container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #051628;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* Matrix Rain Canvas */
+.matrixCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+  z-index: 1;
+}
+
+/* Pixel Grid Background */
+.pixelGrid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(rgba(0, 128, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 128, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: 2;
+}
+
+/* Scanline effect */
+.scanlineEffect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+}
+
+.scanlineEffect::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: rgba(18, 16, 16, 0.1);
+  animation: scanline 10s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  50% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
+}
+
+/* Vignette effect */
+.vignetteEffect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 0 200px rgba(0,0,0,0.5);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Particles */
+.particle {
+  position: absolute;
+  background: #4dc3ff;
+  border-radius: 50%;
+  z-index: 2;
+  animation: circleFloat infinite ease-in-out;
+  box-shadow: 0 0 5px rgba(77, 195, 255, 0.8);
+}
+
+@keyframes circleFloat {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(10px, 10px); }
+  50% { transform: translate(0, 20px); }
+  75% { transform: translate(-10px, 10px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Glowing Orbs */
+.glowingOrb {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 2;
+  opacity: 0.8;
+  will-change: transform;
+}
+
+.orb1 {
+  top: 30%;
+  left: 15%;
+  width: 250px;
+  height: 250px;
+  background: rgba(0, 96, 214, 0.15);
+  filter: blur(60px);
+  animation: float 10s infinite ease-in-out;
+}
+
+.orb2 {
+  bottom: 25%;
+  right: 15%;
+  width: 300px;
+  height: 300px;
+  background: rgba(0, 186, 255, 0.15);
+  filter: blur(70px);
+  animation: float 15s infinite ease-in-out reverse;
+}
+
+.orb3 {
+  top: 60%;
+  left: 60%;
+  width: 200px;
+  height: 200px;
+  background: rgba(77, 39, 176, 0.15);
+  filter: blur(50px);
+  animation: float 12s infinite ease-in-out 2s;
+  opacity: 0.6;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(2deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+/* Animated flicker overlay */
+.flickerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  background: transparent;
+  opacity: 0.03;
+  animation: flicker 5s infinite;
+  pointer-events: none;
+}
+
+@keyframes flicker {
+  0% { opacity: 1; }
+  3% { opacity: 0.8; }
+  6% { opacity: 1; }
+  7% { opacity: 0.4; }
+  8% { opacity: 1; }
+  9% { opacity: 0.6; }
+  10% { opacity: 1; }
+  30% { opacity: 1; }
+  31% { opacity: 0.6; }
+  32% { opacity: 1; }
+  98% { opacity: 1; }
+  99% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Rotating hexagonal grid */
+.hexGrid {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  background-image: url('/images/hex-grid.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: translate(-50%, -50%);
+  opacity: 0.15;
+  animation: rotate 120s linear infinite;
+  z-index: 1;
+}
+
+@keyframes rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Content */
+.content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+/* Logo */
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  animation: pulse 3s infinite ease-in-out;
+}
+
+.logoWrapper {
+  border: 4px dashed #0080ff;
+  border-radius: 15px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 128, 255, 0.7), 0 0 40px rgba(0, 128, 255, 0.3);
+}
+
+.logoWrapper::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border-radius: 20px;
+  background: rgba(0, 128, 255, 0.15);
+  z-index: -1;
+}
+
+.logo {
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(0, 128, 255, 0.8));
+}
+
+.overlayRays {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  background: radial-gradient(circle, transparent 40%, rgba(77, 195, 255, 0.1) 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.glitchActive {
+  border-color: #ff3366;
+  animation: glitch 0.5s infinite;
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.7), 0 0 40px rgba(255, 51, 102, 0.3);
+}
+
+.glitchActive::before {
+  background: rgba(255, 51, 102, 0.15);
+}
+
+.glitchActive .logo {
+  filter: drop-shadow(0 0 10px rgba(255, 51, 102, 0.8));
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-5px, 5px); }
+  40% { transform: translate(-5px, -5px); }
+  60% { transform: translate(5px, 5px); }
+  80% { transform: translate(5px, -5px); }
+  100% { transform: translate(0); }
+}
+
+/* Countdown Timer */
+.countdownContainer {
+  margin-bottom: 48px;
+  padding: 24px;
+  background: rgba(0, 40, 80, 0.4);
+  border: 2px solid #0060cc;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 96, 214, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.lightStreak {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(77, 195, 255, 0.1), transparent);
+  animation: lightStreak 2s infinite ease-out;
+  transform-origin: center;
+  z-index: 1;
+}
+
+@keyframes lightStreak {
+  0% { transform: rotate(0) translate(-50%, -50%); }
+  100% { transform: rotate(360deg) translate(-50%, -50%); }
+}
+
+.countdownTitle {
+  font-size: 1.3rem;
+  color: #4dc3ff;
+  letter-spacing: 2px;
+  font-family: 'VT323', monospace;
+  text-shadow: 0 0 10px rgba(77, 195, 255, 0.8);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.countdownBoxes {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  position: relative;
+  z-index: 2;
+}
+
+.countdownBox {
+  text-align: center;
+}
+
+.countdownValue {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 60, 100, 0.6);
+  border: 2px solid #0070dd;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 112, 221, 0.3);
+  margin-bottom: 8px;
+}
+
+.countdownNumber {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  font-family: 'Press Start 2P', cursive;
+  margin: 0;
+}
+
+.countdownLabel {
+  font-size: 0.7rem;
+  color: #78c6ff;
+  font-family: 'VT323', monospace;
+  margin: 0;
+}
+
+/* Blinking animations for countdown numbers */
+.blink0 { animation: blink 1s infinite; }
+.blink1 { animation: blink 1s infinite; animation-delay: 0.2s; }
+.blink2 { animation: blink 1s infinite; animation-delay: 0.4s; }
+.blink3 { animation: blink 1s infinite; animation-delay: 0.6s; }
+
+@keyframes blink {
+  0% { opacity: 1; }
+  49% { opacity: 1; }
+  50% { opacity: 0; }
+  99% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Coming Soon Text */
+.comingSoonContainer {
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.comingSoonText {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(0, 160, 255, 0.7), 0 0 20px rgba(0, 128, 255, 0.5), 0 0 40px rgba(0, 80, 255, 0.3);
+  font-family: 'Press Start 2P', cursive;
+  letter-spacing: 3px;
+  animation: pulse 3s infinite ease-in-out;
+  margin: 0;
+}
+
+.horizontalLine {
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  right: -10px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4dc3ff, transparent);
+  transform: translateY(-50%);
+  opacity: 0.7;
+  z-index: -1;
+}
+
+.radialGlow {
+  position: absolute;
+  top: -10px;
+  left: 30%;
+  right: 30%;
+  height: 140%;
+  background: radial-gradient(ellipse at center, rgba(77, 195, 255, 0.2) 0%, transparent 70%);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+/* Glitch effects for the Coming Soon text */
+.glitch {
+  animation: glitch 0.5s infinite;
+}
+
+.glitch::before, .glitch::after {
+  content: "COMING SOON";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch::before {
+  color: #ff2a6d;
+  transform: translateX(-2px);
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch::after {
+  color: #2de2e6;
+  transform: translateX(2px);
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+.glitchText {
+  color: #ff3366;
+  text-shadow: none;
+  animation: glitchText 0.5s infinite;
+}
+
+@keyframes glitchText {
+  0% { text-shadow: -2px 3px #ff2a75, 2px -3px #337dff; }
+  25% { text-shadow: 2px 3px #ff2a75, -2px -3px #337dff; }
+  50% { text-shadow: -4px -3px #ff2a75, 4px 3px #337dff; }
+  75% { text-shadow: 4px -3px #ff2a75, -4px 3px #337dff; }
+  100% { text-shadow: -2px 3px #ff2a75, 2px -3px #337dff; }
+}
+
+/* Loading Bar */
+.loadingBarContainer {
+  position: relative;
+  height: 35px;
+  background: rgba(0, 40, 80, 0.5);
+  border-radius: 6px;
+  border: 2px solid #0070dd;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 0 15px rgba(0, 112, 221, 0.5);
+}
+
+.loadingBarContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+
+.loadingBarProgress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #0088ff, #00ccff);
+  transition: width 0.3s ease-out;
+  box-shadow: 0 0 20px rgba(0, 136, 255, 0.7), 0 0 40px rgba(0, 136, 255, 0.4);
+}
+
+.loadingBarShine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background-size: 200% 100%;
+  animation: shine 2s infinite;
+  z-index: 2;
+  opacity: 0.6;
+}
+
+@keyframes shine {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Error states for loading bar */
+.glitchError {
+  border-color: #ff3366;
+  box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
+}
+
+.errorBar {
+  background: repeating-linear-gradient(45deg, #ff2222, #ff2222 10px, #ff6644 10px, #ff6644 20px);
+  animation: glitch 0.2s infinite;
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.7), 0 0 40px rgba(255, 51, 102, 0.4);
+}
+
+.glitchError .loadingBarShine {
+  opacity: 0.3;
+}
+
+/* Loading Status Text */
+.loadingStatus {
+  color: #4dc3ff;
+  font-size: 1rem;
+  font-family: 'VT323', monospace;
+  letter-spacing: 1px;
+  margin-top: 8px;
+  text-shadow: 0 0 5px rgba(77, 195, 255, 0.8), 0 0 10px rgba(77, 195, 255, 0.5);
+}
+
+.errorText {
+  color: #ff4444;
+  text-shadow: 0 0 5px rgba(255, 68, 68, 0.8), 0 0 10px rgba(255, 68, 68, 0.5);
+  animation: glitchText 2s infinite;
+}
+
+/* Encryption Text Box */
+.encryptionContainer {
+  margin-top: 48px;
+  padding: 16px;
+  background: rgba(0, 40, 80, 0.4);
+  border: 1px solid #0060cc;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 96, 204, 0.3);
+}
+
+.scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 40, 80, 0) 0%, rgba(0, 40, 80, 0.2) 50%, rgba(0, 40, 80, 0) 100%);
+  background-size: 100% 4px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.encryptionText {
+  color: #00cc99;
+  font-size: 0.8rem;
+  font-family: monospace;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  animation: scroll 20s linear infinite;
+  text-shadow: 0 0 5px rgba(0, 204, 153, 0.8);
+  position: relative;
+  z-index: 2;
+  margin: 0;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Cyberpunk Footer */
+.cyberpunkFooter {
+  margin-top: 48px;
+  padding: 16px;
+  position: relative;
+}
+
+.statusBoxes {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.statusBox {
+  width: 100px;
+  height: 36px;
+  border: 1px solid #0060cc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 40, 80, 0.4);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 96, 204, 0.3);
+}
+
+.statusBox::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 96, 204, 0.2), transparent);
+  background-size: 200% 100%;
+  z-index: 1;
+}
+
+.statusText {
+  color: #78c6ff;
+  font-size: 0.8rem;
+  font-family: 'VT323', monospace;
+  letter-spacing: 1px;
+  z-index: 2;
+  position: relative;
+  margin: 0;
+}
+
+.statusLight {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+.light0 {
+  background-color: #00cc99;
+  box-shadow: 0 0 5px #00cc99;
+}
+
+.light1 {
+  background-color: #ff3366;
+  box-shadow: 0 0 5px #ff3366;
+  animation-delay: 0.7s;
+}
+
+.light2 {
+  background-color: #ffcc00;
+  box-shadow: 0 0 5px #ffcc00;
+  animation-delay: 1.4s;
+}
+
+/* Circuit decoration */
+.circuitLines {
+  position: relative;
+  margin-top: 32px;
+  height: 20px;
+  width: 100%;
+}
+
+.horizontalCircuitLine {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #0070dd, transparent);
+}
+
+.verticalCircuitLine {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 20px;
+  background: #0070dd;
+}
+
+.left {
+  left: 20%;
+}
+
+.center {
+  left: 50%;
+}
+
+.right {
+  right: 20%;
+}
+
+.circuitNode {
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  background: transparent;
+  border: 1px solid #0070dd;
+  border-radius: 50%;
+}
+
+.leftNode {
+  left: 20%;
+  transform: translate(-50%, -50%);
+}
+
+.centerNode {
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.rightNode {
+  right: 20%;
+  transform: translate(50%, -50%);
+}
+
+.copyrightText {
+  color: rgba(120, 198, 255, 0.6);
+  font-size: 0.7rem;
+  font-family: 'VT323', monospace;
+  margin-top: 16px;
+  letter-spacing: 1px;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .comingSoonText {
+    font-size: 2rem;
+  }
+  
+  .countdownBoxes {
+    gap: 16px;
+  }
+  
+  .countdownValue {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .countdownNumber {
+    font-size: 1.5rem;
+  }
+  
+  .countdownLabel {
+    font-size: 0.6rem;
+  }
+  
+  .statusBox {
+    width: 80px;
+    height: 30px;
+  }
+  
+  .statusText {
+    font-size: 0.7rem;
+  }
+  
+  .countdownTitle {
+    font-size: 1rem;
+  }
+}
+
+/* Animation for status box shine */
+.statusBox:nth-child(1)::before {
+  animation: shine 1.5s infinite;
+}
+
+.statusBox:nth-child(2)::before {
+  animation: shine 1.5s infinite;
+  animation-delay: 0.5s;
+}
+
+.statusBox:nth-child(3)::before {
+  animation: shine 1.5s infinite;
+  animation-delay: 1s;
+}
