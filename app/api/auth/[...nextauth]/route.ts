@@ -9,11 +9,11 @@ console.log("GOOGLE_CLIENT_SECRET exists:", !!process.env.GOOGLE_CLIENT_SECRET);
 const handler = NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      clientId: process.env.GOOGLE_CLIENT_ID || "your-client-id", // default fallback
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "your-client-secret", // default fallback
       authorization: {
         params: {
-          prompt: "select_account",
+          prompt: "select_account", // This will prompt the user to select an account
         },
       },
     }),
@@ -24,15 +24,15 @@ const handler = NextAuth({
     strategy: "jwt",
   },
   pages: {
-    signIn: "/auth/signin",
-    error: "/auth/error",
+    signIn: "/auth/signin", // Define your custom sign-in page
+    error: "/auth/error", // Define your custom error page
   },
   callbacks: {
     async signIn({ user, account }) {
       console.log("Sign in callback called");
-      console.log("User:", user?.email);
+      console.log("User email:", user?.email);
       console.log("Account provider:", account?.provider);
-      return true;
+      return true; // Ensure sign-in is allowed
     },
     async redirect({ url, baseUrl }) {
       console.log("Redirect callback called");
@@ -40,11 +40,11 @@ const handler = NextAuth({
       console.log("BaseURL:", baseUrl);
 
       if (url.startsWith("/")) {
-        return `${baseUrl}${url}`;
+        return `${baseUrl}${url}`; // Redirect to internal path
       } else if (new URL(url).origin === baseUrl) {
-        return url;
+        return url; // Redirect to external URL within the same baseUrl
       }
-      return baseUrl;
+      return baseUrl; // Default fallback
     },
     async jwt({ token, account, user }) {
       console.log("JWT callback called");
@@ -58,25 +58,25 @@ const handler = NextAuth({
         };
       }
 
-      return token;
+      return token; // Return the token as-is if no new data
     },
     async session({ session, token }) {
       console.log("Session callback called");
       console.log("Session user:", session?.user?.email);
 
       if (token && session.user) {
-        // ตรวจสอบว่า token.sub เป็น string ก่อนที่เราจะกำหนดค่า
+        // Ensure token.sub is a string before assigning
         if (typeof token.sub === "string") {
           session.user.id = token.sub;
         }
         
-        // ตรวจสอบว่า token.accessToken เป็น string ก่อนที่จะกำหนดค่า
+        // Ensure token.accessToken is a string before assigning
         if (typeof token.accessToken === "string") {
           session.accessToken = token.accessToken;
         }
       }
 
-      return session;
+      return session; // Return the updated session
     },
   },
   events: {
