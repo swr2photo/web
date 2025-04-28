@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // เปลี่ยนจาก output: 'export' เป็นการใช้ server
-  // output: 'export', // ถ้ามีบรรทัดนี้ ให้คอมเมนต์หรือลบออก
+  output: 'export', // ถ้ามีบรรทัดนี้ ให้คอมเมนต์หรือลบออก
 
   images: {
     domains: ['lh3.googleusercontent.com'], // อนุญาตโดเมนรูปภาพ Google
