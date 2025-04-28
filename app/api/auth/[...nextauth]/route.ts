@@ -65,8 +65,15 @@ const handler = NextAuth({
       console.log("Session user:", session?.user?.email);
 
       if (token && session.user) {
-        session.user.id = token.sub;
-        session.accessToken = token.accessToken;
+        // ตรวจสอบว่า token.sub เป็น string ก่อนที่เราจะกำหนดค่า
+        if (typeof token.sub === "string") {
+          session.user.id = token.sub;
+        }
+        
+        // ตรวจสอบว่า token.accessToken เป็น string ก่อนที่จะกำหนดค่า
+        if (typeof token.accessToken === "string") {
+          session.accessToken = token.accessToken;
+        }
       }
 
       return session;
@@ -78,9 +85,6 @@ const handler = NextAuth({
     },
     async signOut() {
       console.log("User signed out");
-    },
-    async onError({ error }) {  // ใช้ onError แทน error
-      console.error("NextAuth error event:", error);
     },
   },
 });

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
 
 // MUI Components
 import {
@@ -19,7 +18,6 @@ import {
   MenuItem,
   ListItemIcon,
   Divider,
-  Avatar,
 } from "@mui/material";
 
 // MUI Icons
@@ -33,17 +31,17 @@ import HomeIcon from "@mui/icons-material/Home";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import GoogleLoginModal from "./GoogleLoginModal";
+import GoogleLoginModal from "./GoogleLoginModal"; // นำเข้า Modal Login แบบง่าย
 
 export default function VerticalNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isGlitching, setIsGlitching] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // จำลองสถานะการล็อกอิน
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const pathname = usePathname();
   const theme = useTheme();
-  const { data: session, status } = useSession();
   
   // Responsive design
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -65,12 +63,6 @@ export default function VerticalNavbar() {
       clearInterval(glitchInterval);
     };
   }, []);
-
-  // ล็อกข้อมูลเซสชันเมื่อมีการเปลี่ยนแปลง
-  useEffect(() => {
-    console.log("Session status:", status);
-    console.log("Session data:", session);
-  }, [session, status]);
 
   const navItems = [
     { name: "หน้าหลัก", path: "/", icon: <HomeIcon /> },
@@ -108,12 +100,9 @@ export default function VerticalNavbar() {
   };
 
   const handleLogout = () => {
-    signOut({ callbackUrl: '/' });
+    setIsLoggedIn(false);
     handleProfileClose();
   };
-
-  // ใช้สถานะจาก NextAuth แทนการจำลอง
-  const isLoggedIn = status === 'authenticated' && !!session;
 
   return (
     <>
@@ -284,121 +273,49 @@ export default function VerticalNavbar() {
           </Zoom>
         ))}
 
-        {/* Login/Profile Button */}
-        <Zoom
-          in={isMenuOpen}
-          style={{
-            transitionDelay: isMenuOpen ? `${100 * (navItems.length + 1)}ms` : "0ms",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              mb: 2,
-              opacity: isMenuOpen ? 1 : 0,
-              transition: "opacity 0.3s ease",
-            }}
-          >
-            {/* Text label for Login/Profile - hide on mobile */}
-            {!isMobile && (
-              <Tooltip title={isLoggedIn ? "โปรไฟล์" : "เข้าสู่ระบบ"} placement="left" arrow>
-                <Box
-                  component="div"
-                  onClick={isLoggedIn ? handleProfileClick : openLoginModal}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    textDecoration: "none",
-                    mr: 2,
-                    fontSize: isTablet ? "16px" : "18px",
-                    color: "#78c6ff",
-                    fontFamily: "'VT323', monospace",
-                    bgcolor: "transparent",
-                    p: 1,
-                    borderRadius: "4px",
-                    border: "1px solid transparent",
-                    transition: "all 0.3s ease",
-                    cursor: "pointer",
-                    "&:hover": {
-                      color: "#ffffff",
-                      bgcolor: alpha("#0070ff", 0.3),
-                    },
-                  }}
-                >
-                  {isLoggedIn ? "โปรไฟล์" : "เข้าสู่ระบบ"}
-                </Box>
-              </Tooltip>
-            )}
-
-            {/* Circular button for Login/Profile */}
+        {/* Login or Profile */}
+        <Zoom in={isMenuOpen}>
+          <Box sx={{ opacity: isMenuOpen ? 1 : 0, transition: "opacity 0.3s ease" }}>
             {isLoggedIn ? (
-              // โปรไฟล์ผู้ใช้ (หลังจาก login)
-              <Tooltip title={isMobile ? "โปรไฟล์" : ""} placement="left">
+              <Tooltip title="Profile" arrow>
                 <Fab
+                  color="primary"
+                  aria-label="profile"
                   onClick={handleProfileClick}
-                  size={isMobile ? "small" : "medium"}
                   sx={{
+                    mb: 2,
                     bgcolor: alpha("#051628", 0.9),
                     border: "2px solid #0070ff",
                     color: "#4dc3ff",
-                    width: isMobile ? 40 : 48,
-                    height: isMobile ? 40 : 48,
-                    boxShadow: `0 0 8px ${alpha("#0070ff", 0.2)}`,
-                    padding: 0,
-                    overflow: "hidden",
+                    width: isMobile ? 50 : 56,
+                    height: isMobile ? 50 : 56,
+                    boxShadow: `0 0 10px ${alpha("#0070ff", 0.4)}`,
                     "&:hover": {
                       bgcolor: alpha("#051628", 0.95),
                       boxShadow: `0 0 12px ${alpha("#0070ff", 0.5)}`,
                     },
                   }}
                 >
-                  {session?.user?.image ? (
-                    <Avatar 
-                      src={session.user.image} 
-                      alt={session.user.name || "User"}
-                      sx={{ 
-                        width: '100%', 
-                        height: '100%' 
-                      }}
-                    />
-                  ) : (
-                    <AccountCircleIcon />
-                  )}
+                  <AccountCircleIcon />
                 </Fab>
               </Tooltip>
             ) : (
-              // ปุ่ม Login (ก่อน login)
-              <Tooltip title={isMobile ? "เข้าสู่ระบบ" : ""} placement="left">
+              <Tooltip title="Login" arrow>
                 <Fab
+                  color="primary"
+                  aria-label="login"
                   onClick={openLoginModal}
-                  size={isMobile ? "small" : "medium"}
                   sx={{
+                    mb: 2,
                     bgcolor: alpha("#051628", 0.9),
                     border: "2px solid #0070ff",
                     color: "#4dc3ff",
-                    width: isMobile ? 40 : 48,
-                    height: isMobile ? 40 : 48,
-                    boxShadow: `0 0 8px ${alpha("#0070ff", 0.2)}`,
+                    width: isMobile ? 50 : 56,
+                    height: isMobile ? 50 : 56,
+                    boxShadow: `0 0 10px ${alpha("#0070ff", 0.4)}`,
                     "&:hover": {
                       bgcolor: alpha("#051628", 0.95),
                       boxShadow: `0 0 12px ${alpha("#0070ff", 0.5)}`,
-                      color: "#ffffff",
-                    },
-                    "&::before": {
-                      content: '""',
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      borderRadius: "50%",
-                      background:
-                        "linear-gradient(transparent 0%, rgba(0, 16, 32, 0.1) 50%, transparent 100%)",
-                      backgroundSize: "100% 4px",
-                      pointerEvents: "none",
-                      zIndex: 1,
-                      opacity: 0.3,
                     },
                   }}
                 >
@@ -406,98 +323,36 @@ export default function VerticalNavbar() {
                 </Fab>
               </Tooltip>
             )}
+
+            {/* Profile menu */}
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleProfileClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem>
+                <ListItemIcon>
+                  <AccountCircleIcon />
+                </ListItemIcon>
+                Profile
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleLogout}>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </Menu>
           </Box>
         </Zoom>
       </Box>
 
-      {/* Background overlay when menu is open - to help capture click events to close menu */}
-      {isMenuOpen && (
-        <Box
-          onClick={() => setIsMenuOpen(false)}
-          sx={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1200,
-            backgroundColor: isMobile ? alpha("#000", 0.3) : "transparent",
-          }}
-        />
-      )}
-      
-      {/* Add space to ensure content isn't hidden on mobile */}
-      {isMobile && (
-        <Box
-          sx={{
-            height: "60px",
-            width: "100%",
-          }}
-        />
-      )}
-
-      {/* Google Login Modal */}
-      <GoogleLoginModal
-        open={isLoginModalOpen}
-        onClose={closeLoginModal}
-        redirectUrl={pathname || '/'}
-      />
-
-      {/* Profile Menu (แสดงเมื่อคลิกที่ปุ่มโปรไฟล์) */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleProfileClose}
-        onClick={handleProfileClose}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        PaperProps={{
-          sx: {
-            mt: 1.5,
-            minWidth: 180,
-            backgroundColor: alpha("#051628", 0.95),
-            border: "1px solid #0070ff",
-            boxShadow: `0 0 20px ${alpha("#0070ff", 0.3)}`,
-            borderRadius: "8px",
-            '& .MuiMenuItem-root': {
-              color: "#78c6ff",
-              fontFamily: "'VT323', monospace",
-              fontSize: "1rem",
-              '&:hover': {
-                backgroundColor: alpha("#0070ff", 0.2),
-                color: "#ffffff",
-              },
-            },
-          },
-        }}
-      >
-        {session?.user && (
-          <>
-<MenuItem sx={{ py: 1.5, p: 0 }}>
-  <Link href="/profile" style={{ 
-    display: 'flex', 
-    alignItems: 'center',
-    width: '100%',
-    padding: '8px 16px',
-    color: 'inherit',
-    textDecoration: 'none'
-  }}>
-    <ListItemIcon sx={{ color: "#78c6ff", minWidth: 36 }}>
-      <PersonIcon fontSize="small" />
-    </ListItemIcon>
-    โปรไฟล์
-  </Link>
-</MenuItem>
-            <Divider sx={{ borderColor: alpha("#0070ff", 0.3) }} />
-            <MenuItem onClick={handleLogout} sx={{ py: 1.5 }}>
-              <ListItemIcon sx={{ color: "#78c6ff", minWidth: 36 }}>
-                <LogoutIcon fontSize="small" />
-              </ListItemIcon>
-              ออกจากระบบ
-            </MenuItem>
-          </>
-        )}
-      </Menu>
+      {/* Login modal */}
+      <GoogleLoginModal open={isLoginModalOpen} onClose={closeLoginModal} />
     </>
   );
 }

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Press_Start_2P, VT323 } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from "@/components/ConditionalLayout";
 import Footer from "@/components/Footer";
+import AuthProvider from "@/components/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,10 +64,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${pressStart2P.variable} ${vt323.variable} min-h-screen antialiased`}
         style={{ margin: 0, padding: 0, backgroundColor: "#051628" }}
       >
-        <ConditionalLayout>
-          {children}
-        </ConditionalLayout>
-        <Footer />
+        <AuthProvider>
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
