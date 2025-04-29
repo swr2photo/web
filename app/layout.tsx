@@ -5,6 +5,7 @@ import ConditionalLayout from "@/components/ConditionalLayout";
 import Footer from "@/components/Footer";
 import AuthProvider from "@/components/AuthProvider";
 
+// ฟอนต์ต่างๆ
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-// เพิ่มฟอนต์ Press Start 2P และ VT323 ผ่าน next/font
+// เพิ่มฟอนต์ Press Start 2P และ VT323
 const pressStart2P = Press_Start_2P({
   weight: "400",
   variable: "--font-press-start-2p",
@@ -60,7 +61,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Import additional favicon links that aren't covered by metadata */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#051628" />
       </head>

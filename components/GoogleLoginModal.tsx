@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { signIn } from 'next-auth/react';
 import {
   Dialog,
   DialogContent,
@@ -11,13 +10,11 @@ import {
   Typography,
   Box,
   CircularProgress,
-  Divider,
   alpha,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import GoogleIcon from '@mui/icons-material/Google';
 import Image from 'next/image';
 
 interface GoogleLoginModalProps {
@@ -25,6 +22,9 @@ interface GoogleLoginModalProps {
   onClose: () => void;
   redirectUrl?: string;
 }
+
+// URL ของ Cloudflare Worker - แก้ไขให้ตรงกับ Worker ของคุณ
+const WORKER_URL = 'https://auth-proxy.doralaikon-th.workers.dev';
 
 const GoogleLoginModal = ({ open, onClose, redirectUrl = '/' }: GoogleLoginModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +40,7 @@ const GoogleLoginModal = ({ open, onClose, redirectUrl = '/' }: GoogleLoginModal
     setMounted(true);
   }, []);
 
-  // ใช้ NextAuth แทนการจำลอง
+  // แก้ไขเพื่อใช้ Cloudflare Worker แทน NextAuth โดยตรง
   const handleGoogleLogin = async () => {
     try {
       setIsLoading(true);
@@ -49,26 +49,15 @@ const GoogleLoginModal = ({ open, onClose, redirectUrl = '/' }: GoogleLoginModal
       console.log("Starting Google login process...");
       console.log("Redirect URL:", redirectUrl);
       
-      // ใช้ signIn จาก NextAuth
-      const result = await signIn('google', { 
-        callbackUrl: redirectUrl,
-        redirect: false // ไม่ redirect อัตโนมัติ เพื่อจัดการกับข้อผิดพลาด
-      });
+      // สร้าง URL สำหรับการเข้าสู่ระบบ
+      const loginUrl = `${WORKER_URL}/api/auth/signin/google?callbackUrl=${encodeURIComponent(redirectUrl)}`;
       
-      console.log("Sign in result:", result);
+      // เปลี่ยนเส้นทางไปยัง Worker
+      window.location.href = loginUrl;
       
-      if (result?.error) {
-        setError('เกิดข้อผิดพลาดในการเข้าสู่ระบบ โปรดลองอีกครั้ง');
-        console.error('Login error:', result.error);
-        setIsLoading(false);
-      } else if (result?.url) {
-        // สำเร็จและมี URL เป้าหมาย
-        window.location.href = result.url;
-      } else {
-        // สำเร็จแต่ไม่มี URL (ควรจะไม่เกิดขึ้น)
-        onClose();
-        setIsLoading(false);
-      }
+      // หมายเหตุ: โค้ดด้านล่างนี้จะไม่ทำงานเนื่องจากมีการเปลี่ยนเส้นทางไปแล้ว
+      // แต่ถ้ามีข้อผิดพลาดก่อนการเปลี่ยนเส้นทาง จะทำงานตามโค้ดด้านล่างนี้
+      
     } catch (err) {
       setError('เกิดข้อผิดพลาดในการเข้าสู่ระบบ โปรดลองอีกครั้ง');
       console.error('Login error:', err);
@@ -94,8 +83,8 @@ const GoogleLoginModal = ({ open, onClose, redirectUrl = '/' }: GoogleLoginModal
           position: 'relative',
           margin: { xs: 2, sm: 'auto' },
           maxHeight: { xs: 'calc(100% - 32px)', sm: '90vh' },
-          width: { xs: 'calc(100% - 32px)', sm: '100%' }, // Limit width on mobile
-          overflow: 'hidden', // Changed to hidden to prevent content overflow
+          width: { xs: 'calc(100% - 32px)', sm: '100%' },
+          overflow: 'hidden',
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -219,13 +208,12 @@ const GoogleLoginModal = ({ open, onClose, redirectUrl = '/' }: GoogleLoginModal
       
       <DialogContent 
         sx={{ 
-          px: { xs: 2, sm: 3 }, // Reduced padding
+          px: { xs: 2, sm: 3 },
           pb: { xs: 3, sm: 4 }, 
           pt: { xs: 1, sm: 2 }, 
           position: 'relative', 
           zIndex: 1,
-          overflowX: 'hidden', // Prevent horizontal overflow
-          // Add min-height to accommodate content
+          overflowX: 'hidden',
           minHeight: { xs: '180px', sm: '220px' },
           display: 'flex',
           flexDirection: 'column',
@@ -239,7 +227,7 @@ const GoogleLoginModal = ({ open, onClose, redirectUrl = '/' }: GoogleLoginModal
               fontFamily: "'VT323', monospace",
               fontSize: { xs: '1.1rem', sm: '1.2rem' },
               textShadow: '0 0 10px rgba(77, 195, 255, 0.3)',
-              maxWidth: '100%', // Ensure text doesn't exceed container
+              maxWidth: '100%',
             }}
           >
             เข้าสู่ระบบเพื่อเข้าร่วมกิจกรรมและรับข่าวสารล่าสุด
@@ -282,7 +270,7 @@ const GoogleLoginModal = ({ open, onClose, redirectUrl = '/' }: GoogleLoginModal
           display: 'flex', 
           flexDirection: 'column', 
           justifyContent: 'center',
-          my: 2, // Add margin for spacing
+          my: 2,
         }}>
           {/* ปุ่ม Login with Google - simplified */}
           <Button
@@ -408,7 +396,7 @@ const GoogleLoginModal = ({ open, onClose, redirectUrl = '/' }: GoogleLoginModal
             position: 'relative',
             zIndex: 1,
             flexShrink: 0,
-            px: 1, // Add padding to prevent text from touching edges
+            px: 1,
           }}
         >
           การเข้าสู่ระบบถือว่าคุณยอมรับ{' '}

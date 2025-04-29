@@ -1,16 +1,16 @@
+// app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google"; // แก้ไขตรงนี้
+import GoogleProvider from "next-auth/providers/google";
 
-console.log("NextAuth is loading...");
-console.log("NEXTAUTH_URL:", process.env.NEXTAUTH_URL);
-console.log("GOOGLE_CLIENT_ID exists:", !!process.env.GOOGLE_CLIENT_ID);
-console.log("GOOGLE_CLIENT_SECRET exists:", !!process.env.GOOGLE_CLIENT_SECRET);
+// สำหรับ Next.js ที่ deploy บน GitHub Pages (static export)
+// เราไม่สามารถใช้ API routes ได้จริงๆ เพราะไม่มีเซิร์ฟเวอร์
+// แต่เราต้องมีไฟล์นี้เพื่อให้ NextAuth client-side libraries ทำงานได้
 
 const handler = NextAuth({
   providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "placeholder",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "placeholder",
       authorization: {
         params: {
           prompt: "select_account",
@@ -18,72 +18,7 @@ const handler = NextAuth({
       },
     }),
   ],
-  debug: true,
-  secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/auth/signin",
-    error: "/auth/error",
-  },
-  callbacks: {
-    async signIn({ user, account }) {
-      console.log("Sign in callback called");
-      console.log("User:", user?.email);
-      console.log("Account provider:", account?.provider);
-      return true;
-    },
-    async redirect({ url, baseUrl }) {
-      console.log("Redirect callback called");
-      console.log("URL:", url);
-      console.log("BaseURL:", baseUrl);
-
-      if (url.startsWith("/")) {
-        return `${baseUrl}${url}`;
-      } else if (new URL(url).origin === baseUrl) {
-        return url;
-      }
-      return baseUrl;
-    },
-    async jwt({ token, account, user }) {
-      console.log("JWT callback called");
-
-      if (account && user) {
-        return {
-          ...token,
-          accessToken: account.access_token,
-          accessTokenExpires: account.expires_at ? account.expires_at * 1000 : 0,
-          user,
-        };
-      }
-
-      return token;
-    },
-    async session({ session, token }) {
-      console.log("Session callback called");
-      console.log("Session user:", session?.user?.email);
-
-      if (token && session.user) {
-        if (typeof token.sub === "string") {
-          session.user.id = token.sub;
-        }
-        if (typeof token.accessToken === "string") {
-          session.accessToken = token.accessToken;
-        }
-      }
-
-      return session;
-    },
-  },
-  events: {
-    async signIn({ user }) {
-      console.log("User signed in:", user.email);
-    },
-    async signOut() {
-      console.log("User signed out");
-    },
-  },
+  // ไม่ต้องมี apiEndpoints เพราะเราจะจัดการทุกอย่างจาก client side
 });
 
 export { handler as GET, handler as POST };

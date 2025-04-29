@@ -1,4 +1,4 @@
-name = "auth-proxy-worker"
+name = "auth-proxy-worker"  
 main = "src/index.js" # หรือ index.ts หากคุณใช้ TypeScript
 compatibility_date = "2023-09-04"
 node_compat = true
