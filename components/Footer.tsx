@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image'; // นำเข้า Image จาก next/image
+import Image from 'next/image';
 import { 
   Box, 
   Container, 
@@ -82,18 +82,14 @@ const Footer = () => {
         component="footer"
         sx={{
           width: '100%',
-          background: 'linear-gradient(-45deg, #0f172a, #1e40af, #0284c7, #0ea5e9)',
-          backgroundSize: '400% 400%',
+          background: 'linear-gradient(135deg, #0f172a, #1e3a8a, #0369a1, #0ea5e9)',
+          backgroundSize: '300% 300%',
           animation: 'gradientAnimation 15s ease infinite',
-          borderTop: '1px solid rgba(56, 189, 248, 0.3)', // ขอบฟ้าโปร่งแสง
-          padding: { xs: '1.5rem', sm: '1.75rem' },
+          borderTop: '1px solid rgba(56, 189, 248, 0.4)',
+          padding: { xs: '1.25rem 1rem', sm: '1.5rem' },
           position: 'relative',
           overflow: 'hidden',
-          '@keyframes gradientAnimation': {
-            '0%': { backgroundPosition: '0% 50%' },
-            '50%': { backgroundPosition: '100% 50%' },
-            '100%': { backgroundPosition: '0% 50%' },
-          },
+          boxSizing: 'border-box', // Ensure padding is included in width calculation
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -107,6 +103,7 @@ const Footer = () => {
           },
         }}
       >
+        {/* Global styles defined once */}
         <style jsx global>{`
           @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
@@ -123,21 +120,39 @@ const Footer = () => {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-3px); }
           }
+
+          html, body {
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+          }
         `}</style>
         
-        <Container maxWidth="lg">
+        <Container 
+          maxWidth="lg" 
+          sx={{ 
+            px: { xs: 1, sm: 2 },  // Reduce padding on small screens
+            mx: 'auto'             // Center the container
+          }}
+        >
           <Box
             sx={{
               display: 'flex',
               flexDirection: { xs: 'column', sm: 'row' },
               justifyContent: 'space-between',
-              alignItems: { xs: 'flex-start', sm: 'center' },
-              gap: { xs: '1.5rem', sm: '0' }
+              alignItems: { xs: 'center', sm: 'center' },
+              gap: { xs: '1.25rem', sm: '0' },
+              width: '100%'
             }}
           >
-            {/* ทางซ้าย: ไอคอนพิกเซลละเอียด */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {/* ไอคอนติดต่อ */}
+            {/* Left side: Social icons */}
+            <Box 
+              sx={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: '0.5rem',
+                alignItems: { xs: 'center', sm: 'flex-start' }
+              }}
+            >
+              {/* Social icons */}
               <Box 
                 sx={{
                   display: 'flex',
@@ -145,7 +160,7 @@ const Footer = () => {
                   mb: '0.5rem'
                 }}
               >
-                {/* Facebook พิกเซล */}
+                {/* Facebook */}
                 <IconButton 
                   aria-label="Facebook" 
                   href="https://facebook.com/yourpage"
@@ -155,17 +170,19 @@ const Footer = () => {
                     backgroundColor: 'rgba(255, 255, 255, 0.15)',
                     color: '#ffffff',
                     padding: '6px',
+                    boxShadow: '0 0 8px rgba(0, 127, 255, 0.2)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: 'rgba(56, 189, 248, 0.3)',
                       transform: 'translateY(-3px)',
+                      boxShadow: '0 5px 15px rgba(0, 127, 255, 0.3)',
                     }
                   }}
                 >
                   <PixelFacebookIcon />
                 </IconButton>
                 
-                {/* Instagram พิกเซล */}
+                {/* Instagram */}
                 <IconButton 
                   aria-label="Instagram"
                   href="https://instagram.com/yourpage"
@@ -175,17 +192,19 @@ const Footer = () => {
                     backgroundColor: 'rgba(255, 255, 255, 0.15)',
                     color: '#ffffff',
                     padding: '6px',
+                    boxShadow: '0 0 8px rgba(0, 127, 255, 0.2)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: 'rgba(56, 189, 248, 0.3)',
                       transform: 'translateY(-3px)',
+                      boxShadow: '0 5px 15px rgba(0, 127, 255, 0.3)',
                     }
                   }}
                 >
                   <PixelInstagramIcon />
                 </IconButton>
                 
-                {/* Email พิกเซล */}
+                {/* Email */}
                 <IconButton 
                   aria-label="Email"
                   href="mailto:contact@techcamp.com"
@@ -194,10 +213,12 @@ const Footer = () => {
                     backgroundColor: 'rgba(255, 255, 255, 0.15)',
                     color: '#ffffff',
                     padding: '6px',
+                    boxShadow: '0 0 8px rgba(0, 127, 255, 0.2)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: 'rgba(56, 189, 248, 0.3)',
                       transform: 'translateY(-3px)',
+                      boxShadow: '0 5px 15px rgba(0, 127, 255, 0.3)',
                     }
                   }}
                 >
@@ -205,17 +226,18 @@ const Footer = () => {
                 </IconButton>
               </Box>
               
-              {/* นโยบายความเป็นส่วนตัว */}
+              {/* Privacy Policy */}
               <Link 
                 href="/privacy" 
                 sx={{ 
-                  color: 'rgba(255, 255, 255, 0.9)',
+                  color: 'rgba(255, 255, 255, 0.95)',
                   fontSize: '0.8rem',
                   textDecoration: 'none',
                   position: 'relative',
                   fontFamily: '"Noto Sans Thai Looped", sans-serif',
-                  fontWeight: 700, // ฟอนต์หนา
-                  letterSpacing: '0.02em', // เพิ่มระยะห่างตัวอักษรเล็กน้อย
+                  fontWeight: 700,
+                  letterSpacing: '0.03em',
+                  textShadow: '0 0 10px rgba(255, 255, 255, 0.3)',
                   '&:hover': {
                     color: '#ffffff',
                   },
@@ -223,10 +245,10 @@ const Footer = () => {
                     content: '""',
                     position: 'absolute',
                     width: '0%',
-                    height: '1px',
-                    bottom: '-1px',
+                    height: '2px',
+                    bottom: '-3px',
                     left: '0',
-                    backgroundColor: '#ffffff',
+                    backgroundColor: '#7dd3fc',
                     transition: 'width 0.3s ease',
                   },
                   '&:hover::after': {
@@ -238,7 +260,7 @@ const Footer = () => {
               </Link>
             </Box>
             
-            {/* ทางขวา: โลโก้ธรรมดาและข้อความลิขสิทธิ์ */}
+            {/* Right side: Logo and copyright */}
             <Box 
               sx={{ 
                 display: 'flex',
@@ -247,14 +269,15 @@ const Footer = () => {
                 gap: '1rem'
               }}
             >
-              {/* ข้อความลิขสิทธิ์ */}
+              {/* Copyright text */}
               <Box 
                 sx={{ 
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'flex-end',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  fontSize: '0.75rem'
+                  alignItems: { xs: 'center', sm: 'flex-end' },
+                  color: 'rgba(255, 255, 255, 0.95)',
+                  fontSize: '0.75rem',
+                  textShadow: '0 0 10px rgba(0, 127, 255, 0.3)'
                 }}
               >
                 <Typography 
@@ -262,8 +285,8 @@ const Footer = () => {
                   component="div" 
                   sx={{ 
                     fontFamily: '"Noto Sans Thai Looped", sans-serif',
-                    fontWeight: 700, // ฟอนต์หนา
-                    letterSpacing: '0.02em' // เพิ่มระยะห่างตัวอักษรเล็กน้อย
+                    fontWeight: 700,
+                    letterSpacing: '0.02em'
                   }}
                 >
                   ©{new Date().getFullYear()} Tech Camp. สงวนลิขสิทธิ์.
@@ -273,29 +296,35 @@ const Footer = () => {
                   component="div"
                   sx={{ 
                     fontFamily: '"Noto Sans Thai Looped", sans-serif',
-                    fontWeight: 700, // ฟอนต์หนา
-                    letterSpacing: '0.02em' // เพิ่มระยะห่างตัวอักษรเล็กน้อย
+                    fontWeight: 700,
+                    letterSpacing: '0.02em'
                   }}
                 >
                   สร้างขึ้นด้วยความรักและความทุ่มเท ❤️
                 </Typography>
               </Box>
               
-              {/* โลโก้ธรรมดา - เปลี่ยนจาก <img> เป็น <Image /> */}
+              {/* Logo with improved styling */}
               <Box 
                 sx={{ 
-                  width: { xs: '3rem', sm: '4rem' },
-                  height: { xs: '3rem', sm: '4rem' }, // กำหนดความสูงสำหรับ Image component
-                  position: 'relative', // จำเป็นสำหรับ Image component
+                  width: { xs: '3rem', sm: '3.5rem' },
+                  height: { xs: '3rem', sm: '3.5rem' },
+                  position: 'relative',
                   animation: 'float 4s ease-in-out infinite',
-                  filter: 'drop-shadow(0 0 5px rgba(255, 255, 255, 0.3))',
+                  filter: 'drop-shadow(0 0 8px rgba(56, 189, 248, 0.6))',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <Image 
                   src="/images/PSU-SCC-LOGO.svg" 
                   alt="โลโก้ Tech Camp"
                   fill
-                  style={{ objectFit: 'contain' }}
+                  style={{ 
+                    objectFit: 'contain',
+                    maxWidth: '100%'
+                  }}
                   priority
                 />
               </Box>

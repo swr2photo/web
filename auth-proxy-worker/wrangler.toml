@@ -1,0 +1,8 @@
+name = "auth-proxy-worker"
+main = "src/index.js" # หรือ index.ts หากคุณใช้ TypeScript
+compatibility_date = "2023-09-04"
+node_compat = true
+
+[vars]
+WORKER_URL = "https://comcamp.psusci.club"
+NEXTAUTH_URL = "https://swr2photo.github.io"         # เปลี่ยนเป็น GitHub Pages ของคุณ

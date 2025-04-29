@@ -35,7 +35,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GoogleLoginModal from "./GoogleLoginModal";
 
-export default function VerticalNavbar() {
+export default function PixelNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isGlitching, setIsGlitching] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -147,10 +147,11 @@ export default function VerticalNavbar() {
             width: isMobile ? 50 : 56,
             height: isMobile ? 50 : 56,
             position: "relative",
-            boxShadow: `0 0 12px ${alpha("#0070ff", 0.3)}`,
+            boxShadow: `0 0 15px ${alpha("#0070ff", 0.4)}`,
             "&:hover": {
               bgcolor: alpha("#051628", 0.95),
-              boxShadow: `0 0 16px ${alpha("#0070ff", 0.5)}`,
+              boxShadow: `0 0 20px ${alpha("#0070ff", 0.6)}`,
+              transform: "scale(1.05)",
             },
             "&::before": {
               content: '""',
@@ -167,6 +168,7 @@ export default function VerticalNavbar() {
               zIndex: 1,
               opacity: 0.3,
             },
+            transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
           }}
         >
           {isMenuOpen ? (
@@ -179,6 +181,12 @@ export default function VerticalNavbar() {
                 height: isMobile ? 30 : 34,
                 borderRadius: "50%",
                 overflow: "hidden",
+                animation: "pulse 2s infinite ease-in-out",
+                "@keyframes pulse": {
+                  "0%": { filter: "brightness(1)" },
+                  "50%": { filter: "brightness(1.2)" },
+                  "100%": { filter: "brightness(1)" },
+                },
               }}
             >
               <Image
@@ -232,6 +240,8 @@ export default function VerticalNavbar() {
                       "&:hover": {
                         color: "#ffffff",
                         bgcolor: alpha("#0070ff", 0.3),
+                        transform: "translateX(-5px)",
+                        textShadow: "0 0 8px rgba(77, 195, 255, 0.8)",
                       },
                     }}
                   >
@@ -253,12 +263,13 @@ export default function VerticalNavbar() {
                     width: isMobile ? 40 : 48,
                     height: isMobile ? 40 : 48,
                     boxShadow: pathname === item.path
-                      ? `0 0 10px ${alpha("#0070ff", 0.4)}`
-                      : `0 0 8px ${alpha("#0070ff", 0.2)}`,
+                      ? `0 0 12px ${alpha("#0070ff", 0.5)}`
+                      : `0 0 8px ${alpha("#0070ff", 0.3)}`,
                     "&:hover": {
                       bgcolor: alpha("#051628", 0.95),
-                      boxShadow: `0 0 12px ${alpha("#0070ff", 0.5)}`,
+                      boxShadow: `0 0 15px ${alpha("#0070ff", 0.6)}`,
                       color: "#ffffff",
+                      transform: "translateX(-2px) scale(1.05)",
                     },
                     "&::before": {
                       content: '""',
@@ -275,6 +286,7 @@ export default function VerticalNavbar() {
                       zIndex: 1,
                       opacity: 0.3,
                     },
+                    transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
                   }}
                 >
                   {item.icon}
@@ -284,7 +296,7 @@ export default function VerticalNavbar() {
           </Zoom>
         ))}
 
-        {/* Login/Profile Button */}
+        {/* Login Button - Separated from other navigation items */}
         <Zoom
           in={isMenuOpen}
           style={{
@@ -300,7 +312,7 @@ export default function VerticalNavbar() {
               transition: "opacity 0.3s ease",
             }}
           >
-            {/* Text label for Login/Profile - hide on mobile */}
+            {/* Text label for Login - hide on mobile */}
             {!isMobile && (
               <Tooltip title={isLoggedIn ? "โปรไฟล์" : "เข้าสู่ระบบ"} placement="left" arrow>
                 <Box
@@ -309,6 +321,7 @@ export default function VerticalNavbar() {
                   sx={{
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: "center",
                     textDecoration: "none",
                     mr: 2,
                     fontSize: isTablet ? "16px" : "18px",
@@ -316,13 +329,38 @@ export default function VerticalNavbar() {
                     fontFamily: "'VT323', monospace",
                     bgcolor: "transparent",
                     p: 1,
+                    px: 2,
                     borderRadius: "4px",
-                    border: "1px solid transparent",
+                    border: "1px solid #0070ff",
                     transition: "all 0.3s ease",
                     cursor: "pointer",
+                    position: "relative",
+                    overflow: "hidden",
                     "&:hover": {
                       color: "#ffffff",
                       bgcolor: alpha("#0070ff", 0.3),
+                      transform: "translateX(-5px)",
+                      textShadow: "0 0 8px rgba(77, 195, 255, 0.8)",
+                    },
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: -100,
+                      width: "100%",
+                      height: "100%",
+                      background: "linear-gradient(90deg, transparent, rgba(77, 195, 255, 0.2), transparent)",
+                      transition: "transform 0.6s ease",
+                      zIndex: -1,
+                    },
+                    "&:hover::before": {
+                      transform: "translateX(200%)",
+                    },
+                    animation: "border-pulse 3s infinite linear",
+                    "@keyframes border-pulse": {
+                      "0%": { borderColor: "#0070ff" },
+                      "50%": { borderColor: "#4dc3ff" },
+                      "100%": { borderColor: "#0070ff" },
                     },
                   }}
                 >
@@ -344,13 +382,15 @@ export default function VerticalNavbar() {
                     color: "#4dc3ff",
                     width: isMobile ? 40 : 48,
                     height: isMobile ? 40 : 48,
-                    boxShadow: `0 0 8px ${alpha("#0070ff", 0.2)}`,
+                    boxShadow: `0 0 12px ${alpha("#0070ff", 0.4)}`,
                     padding: 0,
                     overflow: "hidden",
                     "&:hover": {
                       bgcolor: alpha("#051628", 0.95),
-                      boxShadow: `0 0 12px ${alpha("#0070ff", 0.5)}`,
+                      boxShadow: `0 0 18px ${alpha("#0070ff", 0.6)}`,
+                      transform: "scale(1.05)",
                     },
+                    transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
                   }}
                 >
                   {session?.user?.image ? (
@@ -359,7 +399,8 @@ export default function VerticalNavbar() {
                       alt={session.user.name || "User"}
                       sx={{ 
                         width: '100%', 
-                        height: '100%' 
+                        height: '100%',
+                        border: "2px solid rgba(77, 195, 255, 0.3)",
                       }}
                     />
                   ) : (
@@ -379,11 +420,14 @@ export default function VerticalNavbar() {
                     color: "#4dc3ff",
                     width: isMobile ? 40 : 48,
                     height: isMobile ? 40 : 48,
-                    boxShadow: `0 0 8px ${alpha("#0070ff", 0.2)}`,
+                    boxShadow: `0 0 12px ${alpha("#0070ff", 0.4)}`,
+                    position: "relative",
+                    overflow: "hidden",
                     "&:hover": {
                       bgcolor: alpha("#051628", 0.95),
-                      boxShadow: `0 0 12px ${alpha("#0070ff", 0.5)}`,
+                      boxShadow: `0 0 18px ${alpha("#0070ff", 0.6)}`,
                       color: "#ffffff",
+                      transform: "scale(1.05)",
                     },
                     "&::before": {
                       content: '""',
@@ -400,9 +444,39 @@ export default function VerticalNavbar() {
                       zIndex: 1,
                       opacity: 0.3,
                     },
+                    "&::after": {
+                      content: '""',
+                      position: "absolute",
+                      top: -50,
+                      left: -50,
+                      right: -50,
+                      bottom: -50,
+                      background: "radial-gradient(circle, rgba(77, 195, 255, 0.2) 0%, transparent 70%)",
+                      opacity: 0,
+                      transition: "opacity 0.3s ease",
+                    },
+                    "&:hover::after": {
+                      opacity: 1,
+                    },
+                    animation: "subtle-glow 4s infinite ease-in-out",
+                    "@keyframes subtle-glow": {
+                      "0%": { boxShadow: `0 0 12px ${alpha("#0070ff", 0.4)}` },
+                      "50%": { boxShadow: `0 0 18px ${alpha("#0070ff", 0.6)}` },
+                      "100%": { boxShadow: `0 0 12px ${alpha("#0070ff", 0.4)}` },
+                    },
+                    transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
                   }}
                 >
-                  <LoginIcon />
+                  <LoginIcon 
+                    sx={{
+                      animation: "icon-pulse 2s infinite ease-in-out",
+                      "@keyframes icon-pulse": {
+                        "0%": { transform: "scale(1)" },
+                        "50%": { transform: "scale(1.1)" },
+                        "100%": { transform: "scale(1)" },
+                      },
+                    }}
+                  />
                 </Fab>
               </Tooltip>
             )}
@@ -422,16 +496,6 @@ export default function VerticalNavbar() {
             bottom: 0,
             zIndex: 1200,
             backgroundColor: isMobile ? alpha("#000", 0.3) : "transparent",
-          }}
-        />
-      )}
-      
-      {/* Add space to ensure content isn't hidden on mobile */}
-      {isMobile && (
-        <Box
-          sx={{
-            height: "60px",
-            width: "100%",
           }}
         />
       )}
@@ -457,37 +521,50 @@ export default function VerticalNavbar() {
             minWidth: 180,
             backgroundColor: alpha("#051628", 0.95),
             border: "1px solid #0070ff",
-            boxShadow: `0 0 20px ${alpha("#0070ff", 0.3)}`,
+            boxShadow: `0 0 20px ${alpha("#0070ff", 0.4)}`,
             borderRadius: "8px",
             '& .MuiMenuItem-root': {
               color: "#78c6ff",
               fontFamily: "'VT323', monospace",
-              fontSize: "1rem",
+              fontSize: "1.1rem",
+              transition: "all 0.2s ease",
               '&:hover': {
                 backgroundColor: alpha("#0070ff", 0.2),
                 color: "#ffffff",
+                transform: "translateX(5px)",
               },
+            },
+            overflow: "hidden",
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "2px",
+              background: "linear-gradient(90deg, transparent, #4dc3ff, transparent)",
+              opacity: 0.7,
             },
           },
         }}
       >
         {session?.user && (
           <>
-<MenuItem sx={{ py: 1.5, p: 0 }}>
-  <Link href="/profile" style={{ 
-    display: 'flex', 
-    alignItems: 'center',
-    width: '100%',
-    padding: '8px 16px',
-    color: 'inherit',
-    textDecoration: 'none'
-  }}>
-    <ListItemIcon sx={{ color: "#78c6ff", minWidth: 36 }}>
-      <PersonIcon fontSize="small" />
-    </ListItemIcon>
-    โปรไฟล์
-  </Link>
-</MenuItem>
+            <MenuItem sx={{ py: 1.5, p: 0 }}>
+              <Link href="/profile" style={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                width: '100%',
+                padding: '8px 16px',
+                color: 'inherit',
+                textDecoration: 'none'
+              }}>
+                <ListItemIcon sx={{ color: "#78c6ff", minWidth: 36 }}>
+                  <PersonIcon fontSize="small" />
+                </ListItemIcon>
+                โปรไฟล์
+              </Link>
+            </MenuItem>
             <Divider sx={{ borderColor: alpha("#0070ff", 0.3) }} />
             <MenuItem onClick={handleLogout} sx={{ py: 1.5 }}>
               <ListItemIcon sx={{ color: "#78c6ff", minWidth: 36 }}>

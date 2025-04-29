@@ -1,13 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // เปลี่ยนจาก output: 'export' เป็นการใช้ server
-  output: 'export', // ถ้ามีบรรทัดนี้ ให้คอมเมนต์หรือลบออก
-
+  output: 'export', // สำหรับ GitHub Pages
+  distDir: 'out',
   images: {
-    domains: ['lh3.googleusercontent.com'], // อนุญาตโดเมนรูปภาพ Google
-    // ถ้ามี unoptimized: true ให้ลบออกหรือเปลี่ยนเป็น false
-    // unoptimized: true,
+    unoptimized: true, // สำหรับ static export
   },
+  // ตรวจสอบให้แน่ใจว่า basePath ตรงกับชื่อ repository GitHub ของคุณหากไม่ได้ใช้โดเมนที่กำหนดเอง
+  // basePath: '/your-repo-name',
 };
 
 module.exports = nextConfig;

@@ -54,22 +54,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th" suppressHydrationWarning>
+    <html 
+      lang="th" 
+      className={`${geistSans.variable} ${geistMono.variable} ${pressStart2P.variable} ${vt323.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Import additional favicon links that aren't covered by metadata */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#051628" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${pressStart2P.variable} ${vt323.variable} min-h-screen antialiased`}
-        style={{ margin: 0, padding: 0, backgroundColor: "#051628" }}
-      >
+      <body suppressHydrationWarning>
         <AuthProvider>
           <ConditionalLayout>
             {children}
           </ConditionalLayout>
-          <Footer />
         </AuthProvider>
+        <Footer />
       </body>
     </html>
   );

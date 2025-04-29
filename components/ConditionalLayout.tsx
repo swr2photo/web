@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Check only valid paths
   const validPaths = ['/', '/curriculum', '/qualifications', '/schedule', '/faq', '/contact'];
@@ -14,6 +15,20 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
 
   useEffect(() => {
     setMounted(true);
+    
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add resize listener
+    window.addEventListener('resize', checkMobile);
+    
+    // Clean up
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Always return children during the first render to avoid hydration errors
@@ -24,9 +39,32 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
   return (
     <>
       {shouldShowNavbar && <PixelNavbar />}
-      <div style={{ paddingTop: shouldShowNavbar ? "80px" : 0 }}>
+      <main className={isMobile ? "mobile-main" : ""}>
         {children}
-      </div>
+      </main>
+      
+      {/* Mobile-specific styles */}
+      <style jsx global>{`
+        .mobile-main {
+          width: 100%;
+          overflow-x: hidden;
+          max-width: 100vw;
+        }
+        
+        @media (max-width: 768px) {
+          html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+          }
+          
+          /* Force width calculation to include borders and padding */
+          * {
+            box-sizing: border-box;
+            max-width: 100%;
+          }
+        }
+      `}</style>
     </>
   );
 }
