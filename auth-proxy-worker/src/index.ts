@@ -1,5 +1,6 @@
 // src/index.ts
 import { Router } from 'itty-router';
+import { ExecutionContext } from '@cloudflare/workers-types';
 
 // Define TypeScript interfaces for our data structures
 interface AuthStoreEntry {

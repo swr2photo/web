@@ -24,7 +24,7 @@ interface GoogleLoginModalProps {
 }
 
 // URL ของ Cloudflare Worker - แก้ไขให้ตรงกับ Worker ของคุณ
-const WORKER_URL = 'https://auth-proxy.doralaikon-th.workers.dev';
+const WORKER_URL = 'https://login.psusci.club';
 
 const GoogleLoginModal = ({ open, onClose, redirectUrl = '/' }: GoogleLoginModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
